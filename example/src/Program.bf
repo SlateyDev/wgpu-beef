@@ -4,7 +4,7 @@ using System.Collections;
 
 using GLFW;
 using Wgpu;
-using ImGui;
+//using ImGui;
 using stb_image;
 
 namespace Example {
@@ -251,11 +251,11 @@ namespace Example {
 			Wgpu.RenderPipeline pipeline = device.CreateRenderPipeline(&pipelineDesc);
 
 			// ImGui
-			ImGui.CHECKVERSION();
-			ImGui.Context* context = ImGui.CreateContext();
-			ImGui.StyleColorsDark();
-			ImGuiImplGlfw.InitForOther(window, true);
-			ImGuiImplWgpu.Init(device, 3, .BGRA8Unorm);
+			//ImGui.CHECKVERSION();
+			//ImGui.Context* context = ImGui.CreateContext();
+			//ImGui.StyleColorsDark();
+			//ImGuiImplGlfw.InitForOther(window, true);
+			//ImGuiImplWgpu.Init(device, 3, .BGRA8Unorm);
 
 			// Loop
 			while (!Glfw.WindowShouldClose(window)) {
@@ -287,14 +287,14 @@ namespace Example {
 					pass.DrawIndexed(indices.Count, 1, 0, 0, 0);
 
 					// ImGui
-					ImGuiImplWgpu.NewFrame();
-					ImGuiImplGlfw.NewFrame();
-					ImGui.NewFrame();
+					//ImGuiImplWgpu.NewFrame();
+					//ImGuiImplGlfw.NewFrame();
+					//ImGui.NewFrame();
 
-					ImGui.ShowDemoWindow();
+					//ImGui.ShowDemoWindow();
 
-					ImGui.Render();
-					ImGuiImplWgpu.RenderDrawData(ImGui.GetDrawData(), pass);
+					//ImGui.Render();
+					//ImGuiImplWgpu.RenderDrawData(ImGui.GetDrawData(), pass);
 
 					// End render pass
 					pass.End();
@@ -310,9 +310,9 @@ namespace Example {
 			}
 
 			// Destroy
-			ImGuiImplWgpu.Shutdown();
-			ImGuiImplGlfw.Shutdown();
-			ImGui.Shutdown(context);
+			//ImGuiImplWgpu.Shutdown();
+			//ImGuiImplGlfw.Shutdown();
+			//ImGui.Shutdown(context);
 
 			Glfw.DestroyWindow(window);
 			Glfw.Terminate();

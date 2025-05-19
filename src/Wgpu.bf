@@ -12,567 +12,792 @@ using System.Interop;
 namespace Wgpu {
 	public static class Wgpu {
 		public enum AdapterType : c_uint {
-			DiscreteGPU = 0,
-			IntegratedGPU = 1,
-			CPU = 2,
-			Unknown = 3,
-			Force32 = 2147483647,
+			DiscreteGPU = 0x00000001,
+			IntegratedGPU = 0x00000002,
+			CPU = 0x00000003,
+			Unknown = 0x00000004,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum AddressMode : c_uint {
-			Repeat = 0,
-			MirrorRepeat = 1,
-			ClampToEdge = 2,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			ClampToEdge = 0x00000001,
+			Repeat = 0x00000002,
+			MirrorRepeat = 0x00000003,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum BackendType : c_uint {
-			Null = 0,
-			WebGPU = 1,
-			D3D11 = 2,
-			D3D12 = 3,
-			Metal = 4,
-			Vulkan = 5,
-			OpenGL = 6,
-			OpenGLES = 7,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			Null = 0x00000001,
+			WebGPU = 0x00000002,
+			D3D11 = 0x00000003,
+			D3D12 = 0x00000004,
+			Metal = 0x00000005,
+			Vulkan = 0x00000006,
+			OpenGL = 0x00000007,
+			OpenGLES = 0x00000008,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum BlendFactor : c_uint {
-			Zero = 0,
-			One = 1,
-			Src = 2,
-			OneMinusSrc = 3,
-			SrcAlpha = 4,
-			OneMinusSrcAlpha = 5,
-			Dst = 6,
-			OneMinusDst = 7,
-			DstAlpha = 8,
-			OneMinusDstAlpha = 9,
-			SrcAlphaSaturated = 10,
-			Constant = 11,
-			OneMinusConstant = 12,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			Zero = 0x00000001,
+			One = 0x00000002,
+			Src = 0x00000003,
+			OneMinusSrc = 0x00000004,
+			SrcAlpha = 0x00000005,
+			OneMinusSrcAlpha = 0x00000006,
+			Dst = 0x00000007,
+			OneMinusDst = 0x00000008,
+			DstAlpha = 0x00000009,
+			OneMinusDstAlpha = 0x0000000A,
+			SrcAlphaSaturated = 0x0000000B,
+			Constant = 0x0000000C,
+			OneMinusConstant = 0x0000000D,
+			Src1 = 0x0000000E,
+			OneMinusSrc1 = 0x0000000F,
+			Src1Alpha = 0x00000010,
+			OneMinusSrc1Alpha = 0x00000011,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum BlendOperation : c_uint {
-			Add = 0,
-			Subtract = 1,
-			ReverseSubtract = 2,
-			Min = 3,
-			Max = 4,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			Add = 0x00000001,
+			Subtract = 0x00000002,
+			ReverseSubtract = 0x00000003,
+			Min = 0x00000004,
+			Max = 0x00000005,
+			Force32 = 0x7FFFFFFF
 		}
 
 		public enum BufferBindingType : c_uint {
-			Undefined = 0,
-			Uniform = 1,
-			Storage = 2,
-			ReadOnlyStorage = 3,
-			Force32 = 2147483647,
+			BindingNotUsed = 0x00000000,
+			Undefined = 0x00000001,
+			Uniform = 0x00000002,
+			Storage = 0x00000003,
+			ReadOnlyStorage = 0x00000004,
+			Force32 = 0x7FFFFFFF
 		}
 
-		public enum BufferMapAsyncStatus : c_uint {
+		public enum BufferMapState : c_uint {
+			Unmapped = 0x00000001,
+			Pending = 0x00000002,
+			Mapped = 0x00000003,
+			Force32 = 0x7FFFFFFF
+		}
+
+		enum CallbackMode : c_uint {
+			WaitAnyOnly = 0x00000001,
+			AllowProcessEvents = 0x00000002,
+			AllowSpontaneous = 0x00000003,
+			Force32 = 0x7FFFFFFF
+		}
+
+		/*public enum BufferMapAsyncStatus : c_uint {
 			Success = 0,
 			Error = 1,
 			Unknown = 2,
 			DeviceLost = 3,
 			DestroyedBeforeCallback = 4,
 			UnmappedBeforeCallback = 5,
-			Force32 = 2147483647,
-		}
+			Force32 = 0x7FFFFFFF,
+		}*/
 
 		public enum CompareFunction : c_uint {
-			Undefined = 0,
-			Never = 1,
-			Less = 2,
-			LessEqual = 3,
-			Greater = 4,
-			GreaterEqual = 5,
-			Equal = 6,
-			NotEqual = 7,
-			Always = 8,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			Never = 0x00000001,
+			Less = 0x00000002,
+			Equal = 0x00000003,
+			LessEqual = 0x00000004,
+			Greater = 0x00000005,
+			NotEqual = 0x00000006,
+			GreaterEqual = 0x00000007,
+			Always = 0x00000008,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum CompilationInfoRequestStatus : c_uint {
-			Success = 0,
-			Error = 1,
-			DeviceLost = 2,
-			Unknown = 3,
-			Force32 = 2147483647,
+			Success = 0x00000001,
+			InstanceDropped = 0x00000002,
+			Error = 0x00000003,
+			Unknown = 0x00000004,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum CompilationMessageType : c_uint {
-			Error = 0,
-			Warning = 1,
-			Info = 2,
-			Force32 = 2147483647,
+			Error = 0x00000001,
+			Warning = 0x00000002,
+			Info = 0x00000003,
+			Force32 = 0x7FFFFFFF,
 		}
 
-		public enum ComputePassTimestampLocation : c_uint {
+		/*public enum ComputePassTimestampLocation : c_uint {
 			Beginning = 0,
 			End = 1,
-			Force32 = 2147483647,
+			Force32 = 0x7FFFFFFF,
+		}*/
+
+		public enum CompositeAlphaMode : c_uint {
+			Auto = 0x00000000,
+			Opaque = 0x00000001,
+			Premultiplied = 0x00000002,
+			Unpremultiplied = 0x00000003,
+			Inherit = 0x00000004,
+			Force32 = 0x7FFFFFFF
 		}
 
 		public enum CreatePipelineAsyncStatus : c_uint {
-			Success = 0,
-			Error = 1,
-			DeviceLost = 2,
-			DeviceDestroyed = 3,
-			Unknown = 4,
-			Force32 = 2147483647,
+			Success = 0x00000001,
+			InstanceDropped = 0x00000002,
+			ValidationError = 0x00000003,
+			InternalError = 0x00000004,
+			Unknown = 0x00000005,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum CullMode : c_uint {
-			None = 0,
-			Front = 1,
-			Back = 2,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			None = 0x00000001,
+			Front = 0x00000002,
+			Back = 0x00000003,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum DeviceLostReason : c_uint {
-			Undefined = 0,
-			Destroyed = 1,
-			Force32 = 2147483647,
+			Unknown = 0x00000001,
+			Destroyed = 0x00000002,
+			InstanceDropped = 0x00000003,
+			FailedCreation = 0x00000004,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum ErrorFilter : c_uint {
-			Validation = 0,
-			OutOfMemory = 1,
-			Force32 = 2147483647,
+			Validation = 0x00000001,
+			OutOfMemory = 0x00000002,
+			Internal = 0x00000003,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum ErrorType : c_uint {
-			NoError = 0,
-			Validation = 1,
-			OutOfMemory = 2,
-			Unknown = 3,
-			DeviceLost = 4,
-			Force32 = 2147483647,
+			NoError = 0x00000001,
+			Validation = 0x00000002,
+			OutOfMemory = 0x00000003,
+			Internal = 0x00000004,
+			Unknown = 0x00000005,
+			Force32 = 0x7FFFFFFF,
+		}
+
+		public enum FeatureLevel : c_uint {
+			Compatibility = 0x00000001,
+			Core = 0x00000002,
+			Force32 = 0x7FFFFFFF
 		}
 
 		public enum FeatureName : c_uint {
-			Undefined = 0,
-			DepthClipControl = 1,
-			Depth24UnormStencil8 = 2,
-			Depth32FloatStencil8 = 3,
-			TimestampQuery = 4,
-			PipelineStatisticsQuery = 5,
-			TextureCompressionBC = 6,
-			TextureCompressionETC2 = 7,
-			TextureCompressionASTC = 8,
-			IndirectFirstInstance = 9,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			DepthClipControl = 0x00000001,
+			Depth32FloatStencil8 = 0x00000002,
+			TimestampQuery = 0x00000003,
+			TextureCompressionBC = 0x00000004,
+			TextureCompressionBCSliced3D = 0x00000005,
+			TextureCompressionETC2 = 0x00000006,
+			TextureCompressionASTC = 0x00000007,
+			TextureCompressionASTCSliced3D = 0x00000008,
+			IndirectFirstInstance = 0x00000009,
+			ShaderF16 = 0x0000000A,
+			RG11B10UfloatRenderable = 0x0000000B,
+			BGRA8UnormStorage = 0x0000000C,
+			Float32Filterable = 0x0000000D,
+			Float32Blendable = 0x0000000E,
+			ClipDistances = 0x0000000F,
+			DualSourceBlending = 0x00000010,
+			Force32 = 0x7FFFFFFF
 		}
 
 		public enum FilterMode : c_uint {
-			Nearest = 0,
-			Linear = 1,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			Nearest = 0x00000001,
+			Linear = 0x00000002,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum FrontFace : c_uint {
-			CCW = 0,
-			CW = 1,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			CCW = 0x00000001,
+			CW = 0x00000002,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum IndexFormat : c_uint {
-			Undefined = 0,
-			Uint16 = 1,
-			Uint32 = 2,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			Uint16 = 0x00000001,
+			Uint32 = 0x00000002,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum LoadOp : c_uint {
-			Undefined = 0,
-			Clear = 1,
-			Load = 2,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			Load = 0x00000001,
+			Clear = 0x00000002,
+			Force32 = 0x7FFFFFFF,
+		}
+
+		public enum MapAsyncStatus : c_uint {
+			Success = 0x00000001,
+			InstanceDropped = 0x00000002,
+			Error = 0x00000003,
+			Aborted = 0x00000004,
+			Unknown = 0x00000005,
+			Force32 = 0x7FFFFFFF
 		}
 
 		public enum MipmapFilterMode : c_uint {
-			Nearest = 0,
-			Linear = 1,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			Nearest = 0x00000001,
+			Linear = 0x00000002,
+			Force32 = 0x7FFFFFFF,
 		}
 
-		public enum PipelineStatisticName : c_uint {
+		public enum OptionalBool : c_uint {
+			False = 0x00000000,
+			True = 0x00000001,
+			Undefined = 0x00000002,
+			Force32 = 0x7FFFFFFF
+		}
+
+		public enum PopErrorScopeStatus : c_uint {
+			Success = 0x00000001,
+			InstanceDropped = 0x00000002,
+			EmptyStack = 0x00000003,
+			Force32 = 0x7FFFFFFF
+		}
+
+		/*public enum PipelineStatisticName : c_uint {
 			VertexShaderInvocations = 0,
 			ClipperInvocations = 1,
 			ClipperPrimitivesOut = 2,
 			FragmentShaderInvocations = 3,
 			ComputeShaderInvocations = 4,
-			Force32 = 2147483647,
-		}
+			Force32 = 0x7FFFFFFF,
+		}*/
 
 		public enum PowerPreference : c_uint {
-			Undefined = 0,
-			LowPower = 1,
-			HighPerformance = 2,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			LowPower = 0x00000001,
+			HighPerformance = 0x00000002,
+			Force32 = 0x7FFFFFFF,
 		}
 
-		public enum PredefinedColorSpace : c_uint {
+		/*public enum PredefinedColorSpace : c_uint {
 			Undefined = 0,
 			Srgb = 1,
-			Force32 = 2147483647,
-		}
+			Force32 = 0x7FFFFFFF,
+		}*/
 
 		public enum PresentMode : c_uint {
-			Immediate = 0,
-			Mailbox = 1,
-			Fifo = 2,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			Fifo = 0x00000001,
+			FifoRelaxed = 0x00000002,
+			Immediate = 0x00000003,
+			Mailbox = 0x00000004,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum PrimitiveTopology : c_uint {
-			PointList = 0,
-			LineList = 1,
-			LineStrip = 2,
-			TriangleList = 3,
-			TriangleStrip = 4,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			PointList = 0x00000001,
+			LineList = 0x00000002,
+			LineStrip = 0x00000003,
+			TriangleList = 0x00000004,
+			TriangleStrip = 0x00000005,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum QueryType : c_uint {
-			Occlusion = 0,
-			PipelineStatistics = 1,
-			Timestamp = 2,
-			Force32 = 2147483647,
+			Occlusion = 0x00000001,
+			Timestamp = 0x00000002,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum QueueWorkDoneStatus : c_uint {
-			Success = 0,
-			Error = 1,
-			Unknown = 2,
-			DeviceLost = 3,
-			Force32 = 2147483647,
+			Success = 0x00000001,
+			InstanceDropped = 0x00000002,
+			Error = 0x00000003,
+			Unknown = 0x00000004,
+			Force32 = 0x7FFFFFFF,
 		}
 
-		public enum RenderPassTimestampLocation : c_uint {
+		/*public enum RenderPassTimestampLocation : c_uint {
 			Beginning = 0,
 			End = 1,
-			Force32 = 2147483647,
-		}
+			Force32 = 0x7FFFFFFF,
+		}*/
 
 		public enum RequestAdapterStatus : c_uint {
-			Success = 0,
-			Unavailable = 1,
-			Error = 2,
-			Unknown = 3,
-			Force32 = 2147483647,
+			Success = 0x00000001,
+			InstanceDropped = 0x00000002,
+			Unavailable = 0x00000003,
+			Error = 0x00000004,
+			Unknown = 0x00000005,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum RequestDeviceStatus : c_uint {
-			Success = 0,
-			Error = 1,
-			Unknown = 2,
-			Force32 = 2147483647,
+			Success = 0x00000001,
+			InstanceDropped = 0x00000002,
+			Error = 0x00000003,
+			Unknown = 0x00000004,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum SType : c_uint {
-			Invalid = 0,
-			SurfaceDescriptorFromMetalLayer = 1,
-			SurfaceDescriptorFromWindowsHWND = 2,
-			SurfaceDescriptorFromXlibWindow = 3,
-			SurfaceDescriptorFromCanvasHTMLSelector = 4,
-			ShaderModuleSPIRVDescriptor = 5,
-			ShaderModuleWGSLDescriptor = 6,
-			PrimitiveDepthClipControl = 7,
-			SurfaceDescriptorFromWaylandSurface = 8,
-			SurfaceDescriptorFromAndroidNativeWindow = 9,
-			SurfaceDescriptorFromXcbWindow = 10,
-			Force32 = 2147483647,
+			ShaderSourceSPIRV = 0x00000001,
+			ShaderSourceWGSL = 0x00000002,
+			RenderPassMaxDrawCount = 0x00000003,
+			SurfaceSourceMetalLayer = 0x00000004,
+			SurfaceSourceWindowsHWND = 0x00000005,
+			SurfaceSourceXlibWindow = 0x00000006,
+			SurfaceSourceWaylandSurface = 0x00000007,
+			SurfaceSourceAndroidNativeWindow = 0x00000008,
+			SurfaceSourceXCBWindow = 0x00000009,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum SamplerBindingType : c_uint {
-			Undefined = 0,
-			Filtering = 1,
-			NonFiltering = 2,
-			Comparison = 3,
-			Force32 = 2147483647,
+			BindingNotUsed = 0x00000000,
+			Undefined = 0x00000001,
+			Filtering = 0x00000002,
+			NonFiltering = 0x00000003,
+			Comparison = 0x00000004,
+			Force32 = 0x7FFFFFFF,
+		}
+
+		public enum Status : c_uint {
+			Success = 0x00000001,
+			Error = 0x00000002,
+			Force32 = 0x7FFFFFFF
 		}
 
 		public enum StencilOperation : c_uint {
-			Keep = 0,
-			Zero = 1,
-			Replace = 2,
-			Invert = 3,
-			IncrementClamp = 4,
-			DecrementClamp = 5,
-			IncrementWrap = 6,
-			DecrementWrap = 7,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			Keep = 0x00000001,
+			Zero = 0x00000002,
+			Replace = 0x00000003,
+			Invert = 0x00000004,
+			IncrementClamp = 0x00000005,
+			DecrementClamp = 0x00000006,
+			IncrementWrap = 0x00000007,
+			DecrementWrap = 0x00000008,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum StorageTextureAccess : c_uint {
-			Undefined = 0,
-			WriteOnly = 1,
-			Force32 = 2147483647,
+			BindingNotUsed = 0x00000000,
+			Undefined = 0x00000001,
+			WriteOnly = 0x00000002,
+			ReadOnly = 0x00000003,
+			ReadWrite = 0x00000004,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum StoreOp : c_uint {
-			Undefined = 0,
-			Store = 1,
-			Discard = 2,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			Store = 0x00000001,
+			Discard = 0x00000002,
+			Force32 = 0x7FFFFFFF,
+		}
+
+		public enum WGPUSurfaceGetCurrentTextureStatus : c_uint {
+			SuccessOptimal = 0x00000001,
+			SuccessSuboptimal = 0x00000002,
+			Timeout = 0x00000003,
+			Outdated = 0x00000004,
+			Lost = 0x00000005,
+			OutOfMemory = 0x00000006,
+			DeviceLost = 0x00000007,
+			Error = 0x00000008,
+			Force32 = 0x7FFFFFFF
 		}
 
 		public enum TextureAspect : c_uint {
-			All = 0,
-			StencilOnly = 1,
-			DepthOnly = 2,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			All = 0x00000001,
+			StencilOnly = 0x00000002,
+			DepthOnly = 0x00000003,
+			Force32 = 0x7FFFFFFF
 		}
 
-		public enum TextureComponentType : c_uint {
+		/*public enum TextureComponentType : c_uint {
 			Float = 0,
 			Sint = 1,
 			Uint = 2,
 			DepthComparison = 3,
-			Force32 = 2147483647,
-		}
+			Force32 = 0x7FFFFFFF,
+		}*/
 
 		public enum TextureDimension : c_uint {
-			_1D = 0,
-			_2D = 1,
-			_3D = 2,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			_1D = 0x00000001,
+			_2D = 0x00000002,
+			_3D = 0x00000003,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum TextureFormat : c_uint {
-			Undefined = 0,
-			R8Unorm = 1,
-			R8Snorm = 2,
-			R8Uint = 3,
-			R8Sint = 4,
-			R16Uint = 5,
-			R16Sint = 6,
-			R16Float = 7,
-			RG8Unorm = 8,
-			RG8Snorm = 9,
-			RG8Uint = 10,
-			RG8Sint = 11,
-			R32Float = 12,
-			R32Uint = 13,
-			R32Sint = 14,
-			RG16Uint = 15,
-			RG16Sint = 16,
-			RG16Float = 17,
-			RGBA8Unorm = 18,
-			RGBA8UnormSrgb = 19,
-			RGBA8Snorm = 20,
-			RGBA8Uint = 21,
-			RGBA8Sint = 22,
-			BGRA8Unorm = 23,
-			BGRA8UnormSrgb = 24,
-			RGB10A2Unorm = 25,
-			RG11B10Ufloat = 26,
-			RGB9E5Ufloat = 27,
-			RG32Float = 28,
-			RG32Uint = 29,
-			RG32Sint = 30,
-			RGBA16Uint = 31,
-			RGBA16Sint = 32,
-			RGBA16Float = 33,
-			RGBA32Float = 34,
-			RGBA32Uint = 35,
-			RGBA32Sint = 36,
-			Stencil8 = 37,
-			Depth16Unorm = 38,
-			Depth24Plus = 39,
-			Depth24PlusStencil8 = 40,
-			Depth24UnormStencil8 = 41,
-			Depth32Float = 42,
-			Depth32FloatStencil8 = 43,
-			BC1RGBAUnorm = 44,
-			BC1RGBAUnormSrgb = 45,
-			BC2RGBAUnorm = 46,
-			BC2RGBAUnormSrgb = 47,
-			BC3RGBAUnorm = 48,
-			BC3RGBAUnormSrgb = 49,
-			BC4RUnorm = 50,
-			BC4RSnorm = 51,
-			BC5RGUnorm = 52,
-			BC5RGSnorm = 53,
-			BC6HRGBUfloat = 54,
-			BC6HRGBFloat = 55,
-			BC7RGBAUnorm = 56,
-			BC7RGBAUnormSrgb = 57,
-			ETC2RGB8Unorm = 58,
-			ETC2RGB8UnormSrgb = 59,
-			ETC2RGB8A1Unorm = 60,
-			ETC2RGB8A1UnormSrgb = 61,
-			ETC2RGBA8Unorm = 62,
-			ETC2RGBA8UnormSrgb = 63,
-			EACR11Unorm = 64,
-			EACR11Snorm = 65,
-			EACRG11Unorm = 66,
-			EACRG11Snorm = 67,
-			ASTC4x4Unorm = 68,
-			ASTC4x4UnormSrgb = 69,
-			ASTC5x4Unorm = 70,
-			ASTC5x4UnormSrgb = 71,
-			ASTC5x5Unorm = 72,
-			ASTC5x5UnormSrgb = 73,
-			ASTC6x5Unorm = 74,
-			ASTC6x5UnormSrgb = 75,
-			ASTC6x6Unorm = 76,
-			ASTC6x6UnormSrgb = 77,
-			ASTC8x5Unorm = 78,
-			ASTC8x5UnormSrgb = 79,
-			ASTC8x6Unorm = 80,
-			ASTC8x6UnormSrgb = 81,
-			ASTC8x8Unorm = 82,
-			ASTC8x8UnormSrgb = 83,
-			ASTC10x5Unorm = 84,
-			ASTC10x5UnormSrgb = 85,
-			ASTC10x6Unorm = 86,
-			ASTC10x6UnormSrgb = 87,
-			ASTC10x8Unorm = 88,
-			ASTC10x8UnormSrgb = 89,
-			ASTC10x10Unorm = 90,
-			ASTC10x10UnormSrgb = 91,
-			ASTC12x10Unorm = 92,
-			ASTC12x10UnormSrgb = 93,
-			ASTC12x12Unorm = 94,
-			ASTC12x12UnormSrgb = 95,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			R8Unorm = 0x00000001,
+			R8Snorm = 0x00000002,
+			R8Uint = 0x00000003,
+			R8Sint = 0x00000004,
+			R16Uint = 0x00000005,
+			R16Sint = 0x00000006,
+			R16Float = 0x00000007,
+			RG8Unorm = 0x00000008,
+			RG8Snorm = 0x00000009,
+			RG8Uint = 0x0000000A,
+			RG8Sint = 0x0000000B,
+			R32Float = 0x0000000C,
+			R32Uint = 0x0000000D,
+			R32Sint = 0x0000000E,
+			RG16Uint = 0x0000000F,
+			RG16Sint = 0x00000010,
+			RG16Float = 0x00000011,
+			RGBA8Unorm = 0x00000012,
+			RGBA8UnormSrgb = 0x00000013,
+			RGBA8Snorm = 0x00000014,
+			RGBA8Uint = 0x00000015,
+			RGBA8Sint = 0x00000016,
+			BGRA8Unorm = 0x00000017,
+			BGRA8UnormSrgb = 0x00000018,
+			RGB10A2Uint = 0x00000019,
+			RGB10A2Unorm = 0x0000001A,
+			RG11B10Ufloat = 0x0000001B,
+			RGB9E5Ufloat = 0x0000001C,
+			RG32Float = 0x0000001D,
+			RG32Uint = 0x0000001E,
+			RG32Sint = 0x0000001F,
+			RGBA16Uint = 0x00000020,
+			RGBA16Sint = 0x00000021,
+			RGBA16Float = 0x00000022,
+			RGBA32Float = 0x00000023,
+			RGBA32Uint = 0x00000024,
+			RGBA32Sint = 0x00000025,
+			Stencil8 = 0x00000026,
+			Depth16Unorm = 0x00000027,
+			Depth24Plus = 0x00000028,
+			Depth24PlusStencil8 = 0x00000029,
+			Depth32Float = 0x0000002A,
+			Depth32FloatStencil8 = 0x0000002B,
+			BC1RGBAUnorm = 0x0000002C,
+			BC1RGBAUnormSrgb = 0x0000002D,
+			BC2RGBAUnorm = 0x0000002E,
+			BC2RGBAUnormSrgb = 0x0000002F,
+			BC3RGBAUnorm = 0x00000030,
+			BC3RGBAUnormSrgb = 0x00000031,
+			BC4RUnorm = 0x00000032,
+			BC4RSnorm = 0x00000033,
+			BC5RGUnorm = 0x00000034,
+			BC5RGSnorm = 0x00000035,
+			BC6HRGBUfloat = 0x00000036,
+			BC6HRGBFloat = 0x00000037,
+			BC7RGBAUnorm = 0x00000038,
+			BC7RGBAUnormSrgb = 0x00000039,
+			ETC2RGB8Unorm = 0x0000003A,
+			ETC2RGB8UnormSrgb = 0x0000003B,
+			ETC2RGB8A1Unorm = 0x0000003C,
+			ETC2RGB8A1UnormSrgb = 0x0000003D,
+			ETC2RGBA8Unorm = 0x0000003E,
+			ETC2RGBA8UnormSrgb = 0x0000003F,
+			EACR11Unorm = 0x00000040,
+			EACR11Snorm = 0x00000041,
+			EACRG11Unorm = 0x00000042,
+			EACRG11Snorm = 0x00000043,
+			ASTC4x4Unorm = 0x00000044,
+			ASTC4x4UnormSrgb = 0x00000045,
+			ASTC5x4Unorm = 0x00000046,
+			ASTC5x4UnormSrgb = 0x00000047,
+			ASTC5x5Unorm = 0x00000048,
+			ASTC5x5UnormSrgb = 0x00000049,
+			ASTC6x5Unorm = 0x0000004A,
+			ASTC6x5UnormSrgb = 0x0000004B,
+			ASTC6x6Unorm = 0x0000004C,
+			ASTC6x6UnormSrgb = 0x0000004D,
+			ASTC8x5Unorm = 0x0000004E,
+			ASTC8x5UnormSrgb = 0x0000004F,
+			ASTC8x6Unorm = 0x00000050,
+			ASTC8x6UnormSrgb = 0x00000051,
+			ASTC8x8Unorm = 0x00000052,
+			ASTC8x8UnormSrgb = 0x00000053,
+			ASTC10x5Unorm = 0x00000054,
+			ASTC10x5UnormSrgb = 0x00000055,
+			ASTC10x6Unorm = 0x00000056,
+			ASTC10x6UnormSrgb = 0x00000057,
+			ASTC10x8Unorm = 0x00000058,
+			ASTC10x8UnormSrgb = 0x00000059,
+			ASTC10x10Unorm = 0x0000005A,
+			ASTC10x10UnormSrgb = 0x0000005B,
+			ASTC12x10Unorm = 0x0000005C,
+			ASTC12x10UnormSrgb = 0x0000005D,
+			ASTC12x12Unorm = 0x0000005E,
+			ASTC12x12UnormSrgb = 0x0000005F,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum TextureSampleType : c_uint {
-			Undefined = 0,
-			Float = 1,
-			UnfilterableFloat = 2,
-			Depth = 3,
-			Sint = 4,
-			Uint = 5,
-			Force32 = 2147483647,
+			BindingNotUsed = 0x00000000,
+			Undefined = 0x00000001,
+			Float = 0x00000002,
+			UnfilterableFloat = 0x00000003,
+			Depth = 0x00000004,
+			Sint = 0x00000005,
+			Uint = 0x00000006,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum TextureViewDimension : c_uint {
-			Undefined = 0,
-			_1D = 1,
-			_2D = 2,
-			_2DArray = 3,
-			Cube = 4,
-			CubeArray = 5,
-			_3D = 6,
-			Force32 = 2147483647,
+			Undefined = 0x00000000,
+			_1D = 0x00000001,
+			_2D = 0x00000002,
+			_2DArray = 0x00000003,
+			Cube = 0x00000004,
+			CubeArray = 0x00000005,
+			_3D = 0x00000006,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum VertexFormat : c_uint {
-			Undefined = 0,
-			Uint8x2 = 1,
-			Uint8x4 = 2,
-			Sint8x2 = 3,
-			Sint8x4 = 4,
-			Unorm8x2 = 5,
-			Unorm8x4 = 6,
-			Snorm8x2 = 7,
-			Snorm8x4 = 8,
-			Uint16x2 = 9,
-			Uint16x4 = 10,
-			Sint16x2 = 11,
-			Sint16x4 = 12,
-			Unorm16x2 = 13,
-			Unorm16x4 = 14,
-			Snorm16x2 = 15,
-			Snorm16x4 = 16,
-			Float16x2 = 17,
-			Float16x4 = 18,
-			Float32 = 19,
-			Float32x2 = 20,
-			Float32x3 = 21,
-			Float32x4 = 22,
-			Uint32 = 23,
-			Uint32x2 = 24,
-			Uint32x3 = 25,
-			Uint32x4 = 26,
-			Sint32 = 27,
-			Sint32x2 = 28,
-			Sint32x3 = 29,
-			Sint32x4 = 30,
-			Force32 = 2147483647,
+			Uint8 = 0x00000001,
+			Uint8x2 = 0x00000002,
+			Uint8x4 = 0x00000003,
+			Sint8 = 0x00000004,
+			Sint8x2 = 0x00000005,
+			Sint8x4 = 0x00000006,
+			Unorm8 = 0x00000007,
+			Unorm8x2 = 0x00000008,
+			Unorm8x4 = 0x00000009,
+			Snorm8 = 0x0000000A,
+			Snorm8x2 = 0x0000000B,
+			Snorm8x4 = 0x0000000C,
+			Uint16 = 0x0000000D,
+			Uint16x2 = 0x0000000E,
+			Uint16x4 = 0x0000000F,
+			Sint16 = 0x00000010,
+			Sint16x2 = 0x00000011,
+			Sint16x4 = 0x00000012,
+			Unorm16 = 0x00000013,
+			Unorm16x2 = 0x00000014,
+			Unorm16x4 = 0x00000015,
+			Snorm16 = 0x00000016,
+			Snorm16x2 = 0x00000017,
+			Snorm16x4 = 0x00000018,
+			Float16 = 0x00000019,
+			Float16x2 = 0x0000001A,
+			Float16x4 = 0x0000001B,
+			Float32 = 0x0000001C,
+			Float32x2 = 0x0000001D,
+			Float32x3 = 0x0000001E,
+			Float32x4 = 0x0000001F,
+			Uint32 = 0x00000020,
+			Uint32x2 = 0x00000021,
+			Uint32x3 = 0x00000022,
+			Uint32x4 = 0x00000023,
+			Sint32 = 0x00000024,
+			Sint32x2 = 0x00000025,
+			Sint32x3 = 0x00000026,
+			Sint32x4 = 0x00000027,
+			Unorm10_10_10_2 = 0x00000028,
+			Unorm8x4BGRA = 0x00000029,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum VertexStepMode : c_uint {
-			Vertex = 0,
-			Instance = 1,
-			Force32 = 2147483647,
+			VertexBufferNotUsed = 0x00000000,
+			Undefined = 0x00000001,
+			Vertex = 0x00000002,
+			Instance = 0x00000003,
+			Force32 = 0x7FFFFFFF,
 		}
 
-		public enum BufferUsage : c_uint {
-			None = 0,
-			MapRead = 1,
-			MapWrite = 2,
-			CopySrc = 4,
-			CopyDst = 8,
-			Index = 16,
-			Vertex = 32,
-			Uniform = 64,
-			Storage = 128,
-			Indirect = 256,
-			QueryResolve = 512,
-			Force32 = 2147483647,
+		public enum WGSLLanguageFeatureName : c_uint {
+			ReadonlyAndReadwriteStorageTextures = 0x00000001,
+			Packed4x8IntegerDotProduct = 0x00000002,
+			UnrestrictedPointerParameters = 0x00000003,
+			PointerCompositeAccess = 0x00000004,
+			Force32 = 0x7FFFFFFF
 		}
 
-		public enum ColorWriteMask : c_uint {
-			None = 0,
-			Red = 1,
-			Green = 2,
-			Blue = 4,
-			Alpha = 8,
-			All = 15,
-			Force32 = 2147483647,
+		public enum WaitStatus : c_uint {
+			Success = 0x00000001,
+			TimedOut = 0x00000002,
+			UnsupportedTimeout = 0x00000003,
+			UnsupportedCount = 0x00000004,
+			UnsupportedMixedSources = 0x00000005,
+			Force32 = 0x7FFFFFFF
 		}
 
-		public enum MapMode : c_uint {
-			None = 0,
-			Read = 1,
-			Write = 2,
-			Force32 = 2147483647,
+		public enum BufferUsage : c_ulong {
+			None = 0x0000000000000000,
+			MapRead = 0x0000000000000001,
+			MapWrite = 0x0000000000000002,
+			CopySrc = 0x0000000000000004,
+			CopyDst = 0x0000000000000008,
+			Index = 0x0000000000000010,
+			Vertex = 0x0000000000000020,
+			Uniform = 0x0000000000000040,
+			Storage = 0x0000000000000080,
+			Indirect = 0x0000000000000100,
+			QueryResolve = 0x0000000000000200
 		}
 
-		public enum ShaderStage : c_uint {
-			None = 0,
-			Vertex = 1,
-			Fragment = 2,
-			Compute = 4,
-			Force32 = 2147483647,
+		public enum ColorWriteMask : c_ulong {
+			None = 0x0000000000000000,
+			Red = 0x0000000000000001,
+			Green = 0x0000000000000002,
+			Blue = 0x0000000000000004,
+			Alpha = 0x0000000000000008,
+			All = 0x000000000000000F /* Red | Green | Blue | Alpha */
 		}
 
-		public enum TextureUsage : c_uint {
-			None = 0,
-			CopySrc = 1,
-			CopyDst = 2,
-			TextureBinding = 4,
-			StorageBinding = 8,
-			RenderAttachment = 16,
-			Force32 = 2147483647,
+		public enum MapMode : c_ulong {
+			None = 0x0000000000000000,
+			Read = 0x0000000000000001,
+			Write = 0x0000000000000002,
 		}
+
+		public enum ShaderStage : c_ulong {
+			None = 0x0000000000000000,
+			Vertex = 0x0000000000000001,
+			Fragment = 0x0000000000000002,
+			Compute = 0x0000000000000004,
+		}
+
+		public enum TextureUsage : c_ulong {
+			None = 0x0000000000000000,
+			CopySrc = 0x0000000000000001,
+			CopyDst = 0x0000000000000002,
+			TextureBinding = 0x0000000000000004,
+			StorageBinding = 0x0000000000000008,
+			RenderAttachment = 0x0000000000000010,
+		}
+
+		//TODO: Continue conversion of webgpu.h to latest (637+ old, 1179+ new)
 
 		public enum NativeSType : c_uint {
-			DeviceExtras = 1610612737,
-			AdapterExtras = 1610612738,
-			Force32 = 2147483647,
+			DeviceExtras = 0x00030001,
+			NativeLimits = 0x00030002,
+			PipelineLayoutExtras = 0x00030003,
+			ShaderModuleGLSLDescriptor = 0x00030004,
+			InstanceExtras = 0x00030006,
+			BindGroupEntryExtras = 0x00030007,
+			BindGroupLayoutEntryExtras = 0x00030008,
+			QuerySetDescriptorExtras = 0x00030009,
+			SurfaceConfigurationExtras = 0x0003000A,
+			Force32 = 0x7FFFFFFF,
 		}
 
 		public enum NativeFeature : c_uint {
-			TEXTURE_ADAPTER_SPECIFIC_FORMAT_FEATURES = 268435456,
+			PushConstants = 0x00030001,
+			TextureAdapterSpecificFormatFeatures = 0x00030002,
+			MultiDrawIndirect = 0x00030003,
+			MultiDrawIndirectCount = 0x00030004,
+			VertexWritableStorage = 0x00030005,
+			TextureBindingArray = 0x00030006,
+			SampledTextureAndStorageBufferArrayNonUniformIndexing = 0x00030007,
+			PipelineStatisticsQuery = 0x00030008,
+			StorageResourceBindingArray = 0x00030009,
+			PartiallyBoundBindingArray = 0x0003000A,
+			TextureFormat16bitNorm = 0x0003000B,
+			TextureCompressionAstcHdr = 0x0003000C,
+			MappablePrimaryBuffers = 0x0003000E,
+			BufferBindingArray = 0x0003000F,
+			UniformBufferAndStorageTextureArrayNonUniformIndexing = 0x00030010,
+			SpirvShaderPassthrough = 0x00030017,
+			VertexAttribute64bit = 0x00030019,
+			TextureFormatNv12 = 0x0003001A,
+			RayTracingAccelerationStructure = 0x0003001B,
+			RayQuery = 0x0003001C,
+			ShaderF64 = 0x0003001D,
+			ShaderI16 = 0x0003001E,
+			ShaderPrimitiveIndex = 0x0003001F,
+			ShaderEarlyDepthTest = 0x00030020,
+			Subgroup = 0x00030021,
+			SubgroupVertex = 0x00030022,
+			SubgroupBarrier = 0x00030023,
+			TimestampQueryInsideEncoders = 0x00030024,
+			TimestampQueryInsidePasses = 0x00030025,
+			Force32 = 0x7FFFFFFF
 		}
 
 		public enum LogLevel : c_uint {
-			Off = 0,
-			Error = 1,
-			Warn = 2,
-			Info = 3,
-			Debug = 4,
-			Trace = 5,
-			Force32 = 2147483647,
+			Off = 0x00000000,
+			Error = 0x00000001,
+			Warn = 0x00000002,
+			Info = 0x00000003,
+			Debug = 0x00000004,
+			Trace = 0x00000005,
+			Force32 = 0x7FFFFFFF
+		}
+
+		public enum InstanceBackend : c_uint {
+			All = 0x00000000,
+			Vulkan = 1 << 0,
+			GL = 1 << 1,
+			Metal = 1 << 2,
+			DX12 = 1 << 3,
+			DX11 = 1 << 4,
+			BrowserWebGPU = 1 << 5,
+			Primary = (1 << 0) | (1 << 2) | (1 << 3) | (1 << 5),
+			Secondary = (1 << 1) | (1 << 4),
+			Force32 = 0x7FFFFFFF
+		}
+
+		public enum InstanceFlag : c_uint {
+			Default = 0x00000000,
+			Debug = 1 << 0,
+			Validation = 1 << 1,
+			DiscardHalLabels = 1 << 2,
+			Force32 = 0x7FFFFFFF
+		}
+
+		public enum Dx12Compiler : c_uint {
+			Undefined = 0x00000000,
+			Fxc = 0x00000001,
+			Dxc = 0x00000002,
+			Force32 = 0x7FFFFFFF
+		}
+
+		public enum Gles3MinorVersion : c_uint {
+			Automatic = 0x00000000,
+			Version0 = 0x00000001,
+			Version1 = 0x00000002,
+			Version2 = 0x00000003,
+			Force32 = 0x7FFFFFFF
+		}
+
+		public enum PipelineStatisicName : c_uint {
+			VertexShaderInvocations = 0x00000000,
+			ClipperInvocations = 0x00000001,
+			ClipperPrimitivesOut = 0x00000002,
+			FragmentShaderInvocations = 0x00000003,
+			ComputeShaderInvocations = 0x00000004,
+			Force32 = 0x7FFFFFFF
+		}
+
+		public enum NativeQueryType : c_uint {
+			PipelineStatistics = 0x00030000,
+			Force32 = 0x7FFFFFFF
+		}
+
+		public enum NativeTextureFormat : c_uint {
+			R16Unorm = 0x00030001,
+			R16Snorm = 0x00030002,
+			Rg16Unorm = 0x00030003,
+			Rg16Snorm = 0x00030004,
+			Rgba16Unorm = 0x00030005,
+			Rgba16Snorm = 0x00030006,
+			NV12 = 0x00030007,
 		}
 
 		[CRepr]
@@ -692,7 +917,7 @@ namespace Wgpu {
 			public void PushErrorScope(ErrorFilter filter) => Wgpu.DevicePushErrorScope(this, filter);
 			public void SetDeviceLostCallback(DeviceLostCallback callback, void* userdata) => Wgpu.DeviceSetDeviceLostCallback(this, callback, userdata);
 			public void SetUncapturedErrorCallback(ErrorCallback callback, void* userdata) => Wgpu.DeviceSetUncapturedErrorCallback(this, callback, userdata);
-			public void Poll(c_bool force_wait) => Wgpu.DevicePoll(this, force_wait);
+			public void Poll(c_bool wait, uint64* wrappedSubmissionIndex) => Wgpu.DevicePoll(this, wait, wrappedSubmissionIndex);
 			public void Drop() => Wgpu.DeviceDrop(this);
 		}
 
@@ -870,27 +1095,19 @@ namespace Wgpu {
 		}
 
 		[CRepr]
-		public struct AdapterProperties {
+		public struct AdapterInfo {
 			public ChainedStructOut* nextInChain;
+			public WGPUStringView vendor;
+			public WGPUStringView architecture;
+			public WGPUStringView device;
+			public WGPUStringView description;
+			public BackendType backendType;
+			public AdapterType adapterType;
 			public uint32 vendorID;
 			public uint32 deviceID;
-			public c_char* name;
-			public c_char* driverDescription;
-			public AdapterType adapterType;
-			public BackendType backendType;
 
 			public this() {
 				this = default;
-			}
-
-			public this(ChainedStructOut* nextInChain, uint32 vendorID, uint32 deviceID, c_char* name, c_char* driverDescription, AdapterType adapterType, BackendType backendType) {
-				this.nextInChain = nextInChain;
-				this.vendorID = vendorID;
-				this.deviceID = deviceID;
-				this.name = name;
-				this.driverDescription = driverDescription;
-				this.adapterType = adapterType;
-				this.backendType = backendType;
 			}
 		}
 
@@ -958,7 +1175,7 @@ namespace Wgpu {
 		[CRepr]
 		public struct BufferDescriptor {
 			public ChainedStruct* nextInChain;
-			public c_char* label;
+			public WGPUStringView label;
 			public BufferUsage usage;
 			public uint64 size;
 			public c_bool mappedAtCreation;
@@ -967,7 +1184,7 @@ namespace Wgpu {
 				this = default;
 			}
 
-			public this(ChainedStruct* nextInChain, c_char* label, BufferUsage usage, uint64 size, c_bool mappedAtCreation) {
+			public this(ChainedStruct* nextInChain, WGPUStringView label, BufferUsage usage, uint64 size, c_bool mappedAtCreation) {
 				this.nextInChain = nextInChain;
 				this.label = label;
 				this.usage = usage;
@@ -998,13 +1215,13 @@ namespace Wgpu {
 		[CRepr]
 		public struct CommandBufferDescriptor {
 			public ChainedStruct* nextInChain;
-			public c_char* label;
+			public WGPUStringView label;
 
 			public this() {
 				this = default;
 			}
 
-			public this(ChainedStruct* nextInChain, c_char* label) {
+			public this(ChainedStruct* nextInChain, WGPUStringView label) {
 				this.nextInChain = nextInChain;
 				this.label = label;
 			}
@@ -1013,13 +1230,13 @@ namespace Wgpu {
 		[CRepr]
 		public struct CommandEncoderDescriptor {
 			public ChainedStruct* nextInChain;
-			public c_char* label;
+			public WGPUStringView label;
 
 			public this() {
 				this = default;
 			}
 
-			public this(ChainedStruct* nextInChain, c_char* label) {
+			public this(ChainedStruct* nextInChain, WGPUStringView label) {
 				this.nextInChain = nextInChain;
 				this.label = label;
 			}
@@ -1028,7 +1245,7 @@ namespace Wgpu {
 		[CRepr]
 		public struct CompilationMessage {
 			public ChainedStruct* nextInChain;
-			public c_char* message;
+			public WGPUStringView message;
 			public CompilationMessageType type;
 			public uint64 lineNum;
 			public uint64 linePos;
@@ -1039,7 +1256,7 @@ namespace Wgpu {
 				this = default;
 			}
 
-			public this(ChainedStruct* nextInChain, c_char* message, CompilationMessageType type, uint64 lineNum, uint64 linePos, uint64 offset, uint64 length) {
+			public this(ChainedStruct* nextInChain, WGPUStringView message, CompilationMessageType type, uint64 lineNum, uint64 linePos, uint64 offset, uint64 length) {
 				this.nextInChain = nextInChain;
 				this.message = message;
 				this.type = type;
@@ -1070,14 +1287,14 @@ namespace Wgpu {
 		[CRepr]
 		public struct ConstantEntry {
 			public ChainedStruct* nextInChain;
-			public c_char* key;
+			public WGPUStringView key;
 			public double value;
 
 			public this() {
 				this = default;
 			}
 
-			public this(ChainedStruct* nextInChain, c_char* key, double value) {
+			public this(ChainedStruct* nextInChain, WGPUStringView key, double value) {
 				this.nextInChain = nextInChain;
 				this.key = key;
 				this.value = value;
@@ -1102,15 +1319,13 @@ namespace Wgpu {
 		}
 
 		[CRepr]
-		public struct InstanceDescriptor {
+		public struct InstanceCapabilities {
 			public ChainedStruct* nextInChain;
+			public bool timedWaitAnyEnable;
+			public c_size timedWaitAnyMaxCount;
 
 			public this() {
 				this = default;
-			}
-
-			public this(ChainedStruct* nextInChain) {
-				this.nextInChain = nextInChain;
 			}
 		}
 
@@ -1121,6 +1336,8 @@ namespace Wgpu {
 			public uint32 maxTextureDimension3D;
 			public uint32 maxTextureArrayLayers;
 			public uint32 maxBindGroups;
+			public uint32 maxBindGroupsPlusVertexBuffers;
+			public uint32 maxBindingsPerBindGroup;
 			public uint32 maxDynamicUniformBuffersPerPipelineLayout;
 			public uint32 maxDynamicStorageBuffersPerPipelineLayout;
 			public uint32 maxSampledTexturesPerShaderStage;
@@ -1133,8 +1350,12 @@ namespace Wgpu {
 			public uint32 minUniformBufferOffsetAlignment;
 			public uint32 minStorageBufferOffsetAlignment;
 			public uint32 maxVertexBuffers;
+			public uint32 maxBufferSize;
 			public uint32 maxVertexAttributes;
 			public uint32 maxVertexBufferArrayStride;
+			public uint32 maxInterStageShaderVariables;
+			public uint32 maxColorAttachments;
+			public uint32 maxColorAttachmentBytesPerSample;
 			public uint32 maxInterStageShaderComponents;
 			public uint32 maxComputeWorkgroupStorageSize;
 			public uint32 maxComputeInvocationsPerWorkgroup;
@@ -1145,35 +1366,6 @@ namespace Wgpu {
 
 			public this() {
 				this = default;
-			}
-
-			public this(uint32 maxTextureDimension1D, uint32 maxTextureDimension2D, uint32 maxTextureDimension3D, uint32 maxTextureArrayLayers, uint32 maxBindGroups, uint32 maxDynamicUniformBuffersPerPipelineLayout, uint32 maxDynamicStorageBuffersPerPipelineLayout, uint32 maxSampledTexturesPerShaderStage, uint32 maxSamplersPerShaderStage, uint32 maxStorageBuffersPerShaderStage, uint32 maxStorageTexturesPerShaderStage, uint32 maxUniformBuffersPerShaderStage, uint64 maxUniformBufferBindingSize, uint64 maxStorageBufferBindingSize, uint32 minUniformBufferOffsetAlignment, uint32 minStorageBufferOffsetAlignment, uint32 maxVertexBuffers, uint32 maxVertexAttributes, uint32 maxVertexBufferArrayStride, uint32 maxInterStageShaderComponents, uint32 maxComputeWorkgroupStorageSize, uint32 maxComputeInvocationsPerWorkgroup, uint32 maxComputeWorkgroupSizeX, uint32 maxComputeWorkgroupSizeY, uint32 maxComputeWorkgroupSizeZ, uint32 maxComputeWorkgroupsPerDimension) {
-				this.maxTextureDimension1D = maxTextureDimension1D;
-				this.maxTextureDimension2D = maxTextureDimension2D;
-				this.maxTextureDimension3D = maxTextureDimension3D;
-				this.maxTextureArrayLayers = maxTextureArrayLayers;
-				this.maxBindGroups = maxBindGroups;
-				this.maxDynamicUniformBuffersPerPipelineLayout = maxDynamicUniformBuffersPerPipelineLayout;
-				this.maxDynamicStorageBuffersPerPipelineLayout = maxDynamicStorageBuffersPerPipelineLayout;
-				this.maxSampledTexturesPerShaderStage = maxSampledTexturesPerShaderStage;
-				this.maxSamplersPerShaderStage = maxSamplersPerShaderStage;
-				this.maxStorageBuffersPerShaderStage = maxStorageBuffersPerShaderStage;
-				this.maxStorageTexturesPerShaderStage = maxStorageTexturesPerShaderStage;
-				this.maxUniformBuffersPerShaderStage = maxUniformBuffersPerShaderStage;
-				this.maxUniformBufferBindingSize = maxUniformBufferBindingSize;
-				this.maxStorageBufferBindingSize = maxStorageBufferBindingSize;
-				this.minUniformBufferOffsetAlignment = minUniformBufferOffsetAlignment;
-				this.minStorageBufferOffsetAlignment = minStorageBufferOffsetAlignment;
-				this.maxVertexBuffers = maxVertexBuffers;
-				this.maxVertexAttributes = maxVertexAttributes;
-				this.maxVertexBufferArrayStride = maxVertexBufferArrayStride;
-				this.maxInterStageShaderComponents = maxInterStageShaderComponents;
-				this.maxComputeWorkgroupStorageSize = maxComputeWorkgroupStorageSize;
-				this.maxComputeInvocationsPerWorkgroup = maxComputeInvocationsPerWorkgroup;
-				this.maxComputeWorkgroupSizeX = maxComputeWorkgroupSizeX;
-				this.maxComputeWorkgroupSizeY = maxComputeWorkgroupSizeY;
-				this.maxComputeWorkgroupSizeZ = maxComputeWorkgroupSizeZ;
-				this.maxComputeWorkgroupsPerDimension = maxComputeWorkgroupsPerDimension;
 			}
 		}
 
@@ -1216,23 +1408,16 @@ namespace Wgpu {
 		[CRepr]
 		public struct PipelineLayoutDescriptor {
 			public ChainedStruct* nextInChain;
-			public c_char* label;
-			public uint32 bindGroupLayoutCount;
+			public WGPUStringView label;
+			public c_size bindGroupLayoutCount;
 			public BindGroupLayout* bindGroupLayouts;
 
 			public this() {
 				this = default;
 			}
-
-			public this(ChainedStruct* nextInChain, c_char* label, uint32 bindGroupLayoutCount, BindGroupLayout* bindGroupLayouts) {
-				this.nextInChain = nextInChain;
-				this.label = label;
-				this.bindGroupLayoutCount = bindGroupLayoutCount;
-				this.bindGroupLayouts = bindGroupLayouts;
-			}
 		}
 
-		[CRepr]
+		/*[CRepr]
 		public struct PrimitiveDepthClipControl {
 			public ChainedStruct chain;
 			public c_bool unclippedDepth;
@@ -1245,7 +1430,7 @@ namespace Wgpu {
 				this.chain = chain;
 				this.unclippedDepth = unclippedDepth;
 			}
-		}
+		}*/
 
 		[CRepr]
 		public struct PrimitiveState {
@@ -1254,53 +1439,35 @@ namespace Wgpu {
 			public IndexFormat stripIndexFormat;
 			public FrontFace frontFace;
 			public CullMode cullMode;
+			public c_bool unclippedDepth;
 
 			public this() {
 				this = default;
-			}
-
-			public this(ChainedStruct* nextInChain, PrimitiveTopology topology, IndexFormat stripIndexFormat, FrontFace frontFace, CullMode cullMode) {
-				this.nextInChain = nextInChain;
-				this.topology = topology;
-				this.stripIndexFormat = stripIndexFormat;
-				this.frontFace = frontFace;
-				this.cullMode = cullMode;
 			}
 		}
 
 		[CRepr]
 		public struct QuerySetDescriptor {
 			public ChainedStruct* nextInChain;
-			public c_char* label;
+			public WGPUStringView label;
 			public QueryType type;
 			public uint32 count;
-			public PipelineStatisticName* pipelineStatistics;
-			public uint32 pipelineStatisticsCount;
 
 			public this() {
 				this = default;
-			}
-
-			public this(ChainedStruct* nextInChain, c_char* label, QueryType type, uint32 count, PipelineStatisticName* pipelineStatistics, uint32 pipelineStatisticsCount) {
-				this.nextInChain = nextInChain;
-				this.label = label;
-				this.type = type;
-				this.count = count;
-				this.pipelineStatistics = pipelineStatistics;
-				this.pipelineStatisticsCount = pipelineStatisticsCount;
 			}
 		}
 
 		[CRepr]
 		public struct QueueDescriptor {
 			public ChainedStruct* nextInChain;
-			public c_char* label;
+			public WGPUStringView label;
 
 			public this() {
 				this = default;
 			}
 
-			public this(ChainedStruct* nextInChain, c_char* label) {
+			public this(ChainedStruct* nextInChain, WGPUStringView label) {
 				this.nextInChain = nextInChain;
 				this.label = label;
 			}
@@ -1309,13 +1476,13 @@ namespace Wgpu {
 		[CRepr]
 		public struct RenderBundleDescriptor {
 			public ChainedStruct* nextInChain;
-			public c_char* label;
+			public WGPUStringView label;
 
 			public this() {
 				this = default;
 			}
 
-			public this(ChainedStruct* nextInChain, c_char* label) {
+			public this(ChainedStruct* nextInChain, WGPUStringView label) {
 				this.nextInChain = nextInChain;
 				this.label = label;
 			}
@@ -1324,8 +1491,8 @@ namespace Wgpu {
 		[CRepr]
 		public struct RenderBundleEncoderDescriptor {
 			public ChainedStruct* nextInChain;
-			public c_char* label;
-			public uint32 colorFormatsCount;
+			public WGPUStringView label;
+			public c_size colorFormatsCount;
 			public TextureFormat* colorFormats;
 			public TextureFormat depthStencilFormat;
 			public uint32 sampleCount;
@@ -1334,17 +1501,6 @@ namespace Wgpu {
 
 			public this() {
 				this = default;
-			}
-
-			public this(ChainedStruct* nextInChain, c_char* label, uint32 colorFormatsCount, TextureFormat* colorFormats, TextureFormat depthStencilFormat, uint32 sampleCount, c_bool depthReadOnly, c_bool stencilReadOnly) {
-				this.nextInChain = nextInChain;
-				this.label = label;
-				this.colorFormatsCount = colorFormatsCount;
-				this.colorFormats = colorFormats;
-				this.depthStencilFormat = depthStencilFormat;
-				this.sampleCount = sampleCount;
-				this.depthReadOnly = depthReadOnly;
-				this.stencilReadOnly = stencilReadOnly;
 			}
 		}
 
@@ -1363,53 +1519,30 @@ namespace Wgpu {
 			public this() {
 				this = default;
 			}
-
-			public this(TextureView view, LoadOp depthLoadOp, StoreOp depthStoreOp, float depthClearValue, c_bool depthReadOnly, LoadOp stencilLoadOp, StoreOp stencilStoreOp, uint32 stencilClearValue, c_bool stencilReadOnly) {
-				this.view = view;
-				this.depthLoadOp = depthLoadOp;
-				this.depthStoreOp = depthStoreOp;
-				this.depthClearValue = depthClearValue;
-				this.depthReadOnly = depthReadOnly;
-				this.stencilLoadOp = stencilLoadOp;
-				this.stencilStoreOp = stencilStoreOp;
-				this.stencilClearValue = stencilClearValue;
-				this.stencilReadOnly = stencilReadOnly;
-			}
 		}
 
 		[CRepr]
 		public struct RenderPassTimestampWrite {
 			public QuerySet querySet;
-			public uint32 queryIndex;
-			public RenderPassTimestampLocation location;
+			public uint32 beginningOfPassWriteIndex;
+			public uint32 endOfPassWriteIndex;
 
 			public this() {
 				this = default;
-			}
-
-			public this(QuerySet querySet, uint32 queryIndex, RenderPassTimestampLocation location) {
-				this.querySet = querySet;
-				this.queryIndex = queryIndex;
-				this.location = location;
 			}
 		}
 
 		[CRepr]
 		public struct RequestAdapterOptions {
 			public ChainedStruct* nextInChain;
-			public Surface compatibleSurface;
+			public FeatureLevel featureLevel;
 			public PowerPreference powerPreference;
 			public c_bool forceFallbackAdapter;
+			public BackendType backendType;
+			public Surface compatibleSurface;
 
 			public this() {
 				this = default;
-			}
-
-			public this(ChainedStruct* nextInChain, Surface compatibleSurface, PowerPreference powerPreference, c_bool forceFallbackAdapter) {
-				this.nextInChain = nextInChain;
-				this.compatibleSurface = compatibleSurface;
-				this.powerPreference = powerPreference;
-				this.forceFallbackAdapter = forceFallbackAdapter;
 			}
 		}
 
@@ -1431,7 +1564,7 @@ namespace Wgpu {
 		[CRepr]
 		public struct SamplerDescriptor {
 			public ChainedStruct* nextInChain;
-			public c_char* label;
+			public WGPUStringView label;
 			public AddressMode addressModeU;
 			public AddressMode addressModeV;
 			public AddressMode addressModeW;
@@ -1446,42 +1579,20 @@ namespace Wgpu {
 			public this() {
 				this = default;
 			}
-
-			public this(ChainedStruct* nextInChain, c_char* label, AddressMode addressModeU, AddressMode addressModeV, AddressMode addressModeW, FilterMode magFilter, FilterMode minFilter, MipmapFilterMode mipmapFilter, float lodMinClamp, float lodMaxClamp, CompareFunction compare, uint16 maxAnisotropy) {
-				this.nextInChain = nextInChain;
-				this.label = label;
-				this.addressModeU = addressModeU;
-				this.addressModeV = addressModeV;
-				this.addressModeW = addressModeW;
-				this.magFilter = magFilter;
-				this.minFilter = minFilter;
-				this.mipmapFilter = mipmapFilter;
-				this.lodMinClamp = lodMinClamp;
-				this.lodMaxClamp = lodMaxClamp;
-				this.compare = compare;
-				this.maxAnisotropy = maxAnisotropy;
-			}
 		}
 
 		[CRepr]
 		public struct ShaderModuleCompilationHint {
 			public ChainedStruct* nextInChain;
-			public c_char* entryPoint;
-			public PipelineLayout layout;
+			public WGPUStringView entryPoint;
 
 			public this() {
 				this = default;
 			}
-
-			public this(ChainedStruct* nextInChain, c_char* entryPoint, PipelineLayout layout) {
-				this.nextInChain = nextInChain;
-				this.entryPoint = entryPoint;
-				this.layout = layout;
-			}
 		}
 
 		[CRepr]
-		public struct ShaderModuleSPIRVDescriptor {
+		public struct ShaderSourceSPIRV {
 			public ChainedStruct chain;
 			public uint32 codeSize;
 			public uint32* code;
@@ -1498,17 +1609,12 @@ namespace Wgpu {
 		}
 
 		[CRepr]
-		public struct ShaderModuleWGSLDescriptor {
+		public struct ShaderSourceWGSL {
 			public ChainedStruct chain;
-			public c_char* code;
+			public WGPUStringView code;
 
 			public this() {
 				this = default;
-			}
-
-			public this(ChainedStruct chain, c_char* code) {
-				this.chain = chain;
-				this.code = code;
 			}
 		}
 
@@ -1551,15 +1657,69 @@ namespace Wgpu {
 		}
 
 		[CRepr]
+		public struct SupportedFeatures {
+			public c_size featureCount;
+			public FeatureName* features;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
+		public struct SupportedWGSLLanguageFeatures {
+			public c_size featureCount;
+			public WGSLLanguageFeatureName * features;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
+		public struct SurfaceCapabilities {
+			public ChainedStruct* nextInChain;
+			public TextureUsage usages;
+			public c_size formatCount;
+			public TextureFormat* formats;
+			public c_size presentModeCount;
+			public PresentMode* presentModes;
+			public c_size alphaModeCount;
+			public CompositeAlphaMode* alphaModes;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
+		public struct SurfaceConfiguration {
+			public ChainedStruct* nextInChain;
+			public Device device;
+			public TextureFormat format;
+			public TextureUsage usage;
+			public uint32 width;
+			public uint32 height;
+			public c_size viewFormatCount;
+			public TextureFormat* viewFormats;
+			public CompositeAlphaMode alphaMode;
+			public PresentMode presentMode;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
 		public struct SurfaceDescriptor {
 			public ChainedStruct* nextInChain;
-			public c_char* label;
+			public WGPUStringView label;
 
 			public this() {
 				this = default;
 			}
 
-			public this(ChainedStruct* nextInChain, c_char* label) {
+			public this(ChainedStruct* nextInChain, WGPUStringView label) {
 				this.nextInChain = nextInChain;
 				this.label = label;
 			}
@@ -1580,7 +1740,7 @@ namespace Wgpu {
 			}
 		}
 
-		[CRepr]
+		/*[CRepr]
 		public struct SurfaceDescriptorFromCanvasHTMLSelector {
 			public ChainedStruct chain;
 			public c_char* selector;
@@ -1593,7 +1753,7 @@ namespace Wgpu {
 				this.chain = chain;
 				this.selector = selector;
 			}
-		}
+		}*/
 
 		[CRepr]
 		public struct SurfaceDescriptorFromMetalLayer {
@@ -1665,13 +1825,13 @@ namespace Wgpu {
 		public struct SurfaceDescriptorFromXlibWindow {
 			public ChainedStruct chain;
 			public void* display;
-			public uint32 window;
+			public uint64 window;
 
 			public this() {
 				this = default;
 			}
 
-			public this(ChainedStruct chain, void* display, uint32 window) {
+			public this(ChainedStruct chain, void* display, uint64 window) {
 				this.chain = chain;
 				this.display = display;
 				this.window = window;
@@ -1679,6 +1839,28 @@ namespace Wgpu {
 		}
 
 		[CRepr]
+		public struct SurfaceTexture {
+			public ChainedStructOut* nextInChain;
+			public Texture texture;
+			public WGPUSurfaceGetCurrentTextureStatus status;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
+		public struct TexelCopyBufferLayout {
+			public uint64 offset;
+			public uint32 bytesPerRow;
+			public uint32 rowsPerImage;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		/*[CRepr]
 		public struct SwapChainDescriptor {
 			public ChainedStruct* nextInChain;
 			public c_char* label;
@@ -1701,7 +1883,7 @@ namespace Wgpu {
 				this.height = height;
 				this.presentMode = presentMode;
 			}
-		}
+		}*/
 
 		[CRepr]
 		public struct TextureBindingLayout {
@@ -1722,7 +1904,7 @@ namespace Wgpu {
 			}
 		}
 
-		[CRepr]
+		/*[CRepr]
 		public struct TextureDataLayout {
 			public ChainedStruct* nextInChain;
 			public uint64 offset;
@@ -1739,12 +1921,12 @@ namespace Wgpu {
 				this.bytesPerRow = bytesPerRow;
 				this.rowsPerImage = rowsPerImage;
 			}
-		}
+		}*/
 
 		[CRepr]
 		public struct TextureViewDescriptor {
 			public ChainedStruct* nextInChain;
-			public c_char* label;
+			public WGPUStringView label;
 			public TextureFormat format;
 			public TextureViewDimension dimension;
 			public uint32 baseMipLevel;
@@ -1752,21 +1934,10 @@ namespace Wgpu {
 			public uint32 baseArrayLayer;
 			public uint32 arrayLayerCount;
 			public TextureAspect aspect;
+			public TextureUsage usage;
 
 			public this() {
 				this = default;
-			}
-
-			public this(ChainedStruct* nextInChain, c_char* label, TextureFormat format, TextureViewDimension dimension, uint32 baseMipLevel, uint32 mipLevelCount, uint32 baseArrayLayer, uint32 arrayLayerCount, TextureAspect aspect) {
-				this.nextInChain = nextInChain;
-				this.label = label;
-				this.format = format;
-				this.dimension = dimension;
-				this.baseMipLevel = baseMipLevel;
-				this.mipLevelCount = mipLevelCount;
-				this.baseArrayLayer = baseArrayLayer;
-				this.arrayLayerCount = arrayLayerCount;
-				this.aspect = aspect;
 			}
 		}
 
@@ -1790,21 +1961,13 @@ namespace Wgpu {
 		[CRepr]
 		public struct BindGroupDescriptor {
 			public ChainedStruct* nextInChain;
-			public c_char* label;
+			public WGPUStringView label;
 			public BindGroupLayout layout;
-			public uint32 entryCount;
+			public c_size entryCount;
 			public BindGroupEntry* entries;
 
 			public this() {
 				this = default;
-			}
-
-			public this(ChainedStruct* nextInChain, c_char* label, BindGroupLayout layout, uint32 entryCount, BindGroupEntry* entries) {
-				this.nextInChain = nextInChain;
-				this.label = label;
-				this.layout = layout;
-				this.entryCount = entryCount;
-				this.entries = entries;
 			}
 		}
 
@@ -1851,7 +2014,7 @@ namespace Wgpu {
 		[CRepr]
 		public struct CompilationInfo {
 			public ChainedStruct* nextInChain;
-			public uint32 messageCount;
+			public c_size messageCount;
 			public CompilationMessage* messages;
 
 			public this() {
@@ -1868,19 +2031,11 @@ namespace Wgpu {
 		[CRepr]
 		public struct ComputePassDescriptor {
 			public ChainedStruct* nextInChain;
-			public c_char* label;
-			public uint32 timestampWriteCount;
+			public WGPUStringView label;
 			public ComputePassTimestampWrite* timestampWrites;
 
 			public this() {
 				this = default;
-			}
-
-			public this(ChainedStruct* nextInChain, c_char* label, uint32 timestampWriteCount, ComputePassTimestampWrite* timestampWrites) {
-				this.nextInChain = nextInChain;
-				this.label = label;
-				this.timestampWriteCount = timestampWriteCount;
-				this.timestampWrites = timestampWrites;
 			}
 		}
 
@@ -1918,6 +2073,32 @@ namespace Wgpu {
 		}
 
 		[CRepr]
+		public struct DeviceDescriptor {
+			public ChainedStruct* nextInChain;
+			public WGPUStringView label;
+			public c_size requiredFeatureCount;
+			public FeatureName* requiredFeatures;
+			public Limits* requiredLimits;
+			public QueueDescriptor defaultQueue;
+			public DeviceLostCallbackInfo deviceLostCallbackInfo;
+			public UncapturedErrorCallbackInfo uncapturedErrorCallbackInfo;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
+		public struct FutureWaitInfo {
+			public Future future;
+			public c_bool completed;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		/*[CRepr]
 		public struct ImageCopyBuffer {
 			public ChainedStruct* nextInChain;
 			public TextureDataLayout layout;
@@ -1953,32 +2134,26 @@ namespace Wgpu {
 				this.origin = origin;
 				this.aspect = aspect;
 			}
-		}
+		}*/
 
 		[CRepr]
 		public struct ProgrammableStageDescriptor {
 			public ChainedStruct* nextInChain;
 			public ShaderModule module;
-			public c_char* entryPoint;
-			public uint32 constantCount;
+			public WGPUStringView entryPoint;
+			public c_size constantCount;
 			public ConstantEntry* constants;
 
 			public this() {
 				this = default;
 			}
-
-			public this(ChainedStruct* nextInChain, ShaderModule module, c_char* entryPoint, uint32 constantCount, ConstantEntry* constants) {
-				this.nextInChain = nextInChain;
-				this.module = module;
-				this.entryPoint = entryPoint;
-				this.constantCount = constantCount;
-				this.constants = constants;
-			}
 		}
 
 		[CRepr]
 		public struct RenderPassColorAttachment {
+			public ChainedStruct* nextInChain;
 			public TextureView view;
+			public uint32 depthSlice;
 			public TextureView resolveTarget;
 			public LoadOp loadOp;
 			public StoreOp storeOp;
@@ -1987,17 +2162,31 @@ namespace Wgpu {
 			public this() {
 				this = default;
 			}
+		}
 
-			public this(TextureView view, TextureView resolveTarget, LoadOp loadOp, StoreOp storeOp, Color clearValue) {
-				this.view = view;
-				this.resolveTarget = resolveTarget;
-				this.loadOp = loadOp;
-				this.storeOp = storeOp;
-				this.clearValue = clearValue;
+		[CRepr]
+		public struct TexelCopyBufferInfo {
+			public TexelCopyBufferLayout layout;
+			public Buffer buffer;
+
+			public this() {
+				this = default;
 			}
 		}
 
 		[CRepr]
+		public struct TexelCopyTextureInfo {
+			public Texture texture;
+			public uint32 mipLevel;
+			public Origin3D origin;
+			public TextureAspect aspect;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		/*[CRepr]
 		public struct RequiredLimits {
 			public ChainedStruct* nextInChain;
 			public Limits limits;
@@ -2010,9 +2199,9 @@ namespace Wgpu {
 				this.nextInChain = nextInChain;
 				this.limits = limits;
 			}
-		}
+		}*/
 
-		[CRepr]
+		/*[CRepr]
 		public struct ShaderModuleDescriptor {
 			public ChainedStruct* nextInChain;
 			public c_char* label;
@@ -2029,9 +2218,9 @@ namespace Wgpu {
 				this.hintCount = hintCount;
 				this.hints = hints;
 			}
-		}
+		}*/
 
-		[CRepr]
+		/*[CRepr]
 		public struct SupportedLimits {
 			public ChainedStructOut* nextInChain;
 			public Limits limits;
@@ -2044,74 +2233,47 @@ namespace Wgpu {
 				this.nextInChain = nextInChain;
 				this.limits = limits;
 			}
-		}
+		}*/
 
 		[CRepr]
 		public struct TextureDescriptor {
 			public ChainedStruct* nextInChain;
-			public c_char* label;
+			public WGPUStringView label;
 			public TextureUsage usage;
 			public TextureDimension dimension;
 			public Extent3D size;
 			public TextureFormat format;
 			public uint32 mipLevelCount;
 			public uint32 sampleCount;
-			public uint32 viewFormatCount;
+			public c_size viewFormatCount;
 			public TextureFormat* viewFormats;
 
 			public this() {
 				this = default;
 			}
-
-			public this(ChainedStruct* nextInChain, c_char* label, TextureUsage usage, TextureDimension dimension, Extent3D size, TextureFormat format, uint32 mipLevelCount, uint32 sampleCount, uint32 viewFormatCount, TextureFormat* viewFormats) {
-				this.nextInChain = nextInChain;
-				this.label = label;
-				this.usage = usage;
-				this.dimension = dimension;
-				this.size = size;
-				this.format = format;
-				this.mipLevelCount = mipLevelCount;
-				this.sampleCount = sampleCount;
-				this.viewFormatCount = viewFormatCount;
-				this.viewFormats = viewFormats;
-			}
 		}
 
 		[CRepr]
 		public struct VertexBufferLayout {
-			public uint64 arrayStride;
 			public VertexStepMode stepMode;
-			public uint32 attributeCount;
+			public uint64 arrayStride;
+			public c_size attributeCount;
 			public VertexAttribute* attributes;
 
 			public this() {
 				this = default;
-			}
-
-			public this(uint64 arrayStride, VertexStepMode stepMode, uint32 attributeCount, VertexAttribute* attributes) {
-				this.arrayStride = arrayStride;
-				this.stepMode = stepMode;
-				this.attributeCount = attributeCount;
-				this.attributes = attributes;
 			}
 		}
 
 		[CRepr]
 		public struct BindGroupLayoutDescriptor {
 			public ChainedStruct* nextInChain;
-			public c_char* label;
-			public uint32 entryCount;
+			public WGPUString label;
+			public c_size entryCount;
 			public BindGroupLayoutEntry* entries;
 
 			public this() {
 				this = default;
-			}
-
-			public this(ChainedStruct* nextInChain, c_char* label, uint32 entryCount, BindGroupLayoutEntry* entries) {
-				this.nextInChain = nextInChain;
-				this.label = label;
-				this.entryCount = entryCount;
-				this.entries = entries;
 			}
 		}
 
@@ -2137,69 +2299,27 @@ namespace Wgpu {
 		[CRepr]
 		public struct ComputePipelineDescriptor {
 			public ChainedStruct* nextInChain;
-			public c_char* label;
+			public WGPUString label;
 			public PipelineLayout layout;
 			public ProgrammableStageDescriptor compute;
 
 			public this() {
 				this = default;
 			}
-
-			public this(ChainedStruct* nextInChain, c_char* label, PipelineLayout layout, ProgrammableStageDescriptor compute) {
-				this.nextInChain = nextInChain;
-				this.label = label;
-				this.layout = layout;
-				this.compute = compute;
-			}
-		}
-
-		[CRepr]
-		public struct DeviceDescriptor {
-			public ChainedStruct* nextInChain;
-			public c_char* label;
-			public uint32 requiredFeaturesCount;
-			public FeatureName* requiredFeatures;
-			public RequiredLimits* requiredLimits;
-			public QueueDescriptor defaultQueue;
-
-			public this() {
-				this = default;
-			}
-
-			public this(ChainedStruct* nextInChain, c_char* label, uint32 requiredFeaturesCount, FeatureName* requiredFeatures, RequiredLimits* requiredLimits, QueueDescriptor defaultQueue) {
-				this.nextInChain = nextInChain;
-				this.label = label;
-				this.requiredFeaturesCount = requiredFeaturesCount;
-				this.requiredFeatures = requiredFeatures;
-				this.requiredLimits = requiredLimits;
-				this.defaultQueue = defaultQueue;
-			}
 		}
 
 		[CRepr]
 		public struct RenderPassDescriptor {
 			public ChainedStruct* nextInChain;
-			public c_char* label;
-			public uint32 colorAttachmentCount;
+			public WGPUStringView label;
+			public c_size colorAttachmentCount;
 			public RenderPassColorAttachment* colorAttachments;
 			public RenderPassDepthStencilAttachment* depthStencilAttachment;
 			public QuerySet occlusionQuerySet;
-			public uint32 timestampWriteCount;
 			public RenderPassTimestampWrite* timestampWrites;
 
 			public this() {
 				this = default;
-			}
-
-			public this(ChainedStruct* nextInChain, c_char* label, uint32 colorAttachmentCount, RenderPassColorAttachment* colorAttachments, RenderPassDepthStencilAttachment* depthStencilAttachment, QuerySet occlusionQuerySet, uint32 timestampWriteCount, RenderPassTimestampWrite* timestampWrites) {
-				this.nextInChain = nextInChain;
-				this.label = label;
-				this.colorAttachmentCount = colorAttachmentCount;
-				this.colorAttachments = colorAttachments;
-				this.depthStencilAttachment = depthStencilAttachment;
-				this.occlusionQuerySet = occlusionQuerySet;
-				this.timestampWriteCount = timestampWriteCount;
-				this.timestampWrites = timestampWrites;
 			}
 		}
 
@@ -2207,24 +2327,14 @@ namespace Wgpu {
 		public struct VertexState {
 			public ChainedStruct* nextInChain;
 			public ShaderModule module;
-			public c_char* entryPoint;
-			public uint32 constantCount;
+			public WGPUStringView entryPoint;
+			public c_size constantCount;
 			public ConstantEntry* constants;
-			public uint32 bufferCount;
+			public c_size bufferCount;
 			public VertexBufferLayout* buffers;
 
 			public this() {
 				this = default;
-			}
-
-			public this(ChainedStruct* nextInChain, ShaderModule module, c_char* entryPoint, uint32 constantCount, ConstantEntry* constants, uint32 bufferCount, VertexBufferLayout* buffers) {
-				this.nextInChain = nextInChain;
-				this.module = module;
-				this.entryPoint = entryPoint;
-				this.constantCount = constantCount;
-				this.constants = constants;
-				this.bufferCount = bufferCount;
-				this.buffers = buffers;
 			}
 		}
 
@@ -2232,31 +2342,21 @@ namespace Wgpu {
 		public struct FragmentState {
 			public ChainedStruct* nextInChain;
 			public ShaderModule module;
-			public c_char* entryPoint;
-			public uint32 constantCount;
+			public WGPUStringView entryPoint;
+			public c_size constantCount;
 			public ConstantEntry* constants;
-			public uint32 targetCount;
+			public c_size targetCount;
 			public ColorTargetState* targets;
 
 			public this() {
 				this = default;
-			}
-
-			public this(ChainedStruct* nextInChain, ShaderModule module, c_char* entryPoint, uint32 constantCount, ConstantEntry* constants, uint32 targetCount, ColorTargetState* targets) {
-				this.nextInChain = nextInChain;
-				this.module = module;
-				this.entryPoint = entryPoint;
-				this.constantCount = constantCount;
-				this.constants = constants;
-				this.targetCount = targetCount;
-				this.targets = targets;
 			}
 		}
 
 		[CRepr]
 		public struct RenderPipelineDescriptor {
 			public ChainedStruct* nextInChain;
-			public c_char* label;
+			public WGPUStringView label;
 			public PipelineLayout layout;
 			public VertexState vertex;
 			public PrimitiveState primitive;
@@ -2267,52 +2367,203 @@ namespace Wgpu {
 			public this() {
 				this = default;
 			}
-
-			public this(ChainedStruct* nextInChain, c_char* label, PipelineLayout layout, VertexState vertex, PrimitiveState primitive, DepthStencilState* depthStencil, MultisampleState multisample, FragmentState* fragment) {
-				this.nextInChain = nextInChain;
-				this.label = label;
-				this.layout = layout;
-				this.vertex = vertex;
-				this.primitive = primitive;
-				this.depthStencil = depthStencil;
-				this.multisample = multisample;
-				this.fragment = fragment;
-			}
 		}
 
 		[CRepr]
-		public struct AdapterExtras {
-			public ChainedStruct chain;
-			public BackendType backend;
+		public struct InstanceExtras {
+			public ChainedStruct* chain;
+			public InstanceBackend backends;
+			public InstanceFlag flags;
+			public Dx12Compiler dx12ShaderCompiler;
+			public Gles3MinorVersion gles3MinorVersion;
+			public WGPUStringView dxilPath;
+			public WGPUStringView dxcPath;
 
 			public this() {
 				this = default;
-			}
-
-			public this(ChainedStruct chain, BackendType backend) {
-				this.chain = chain;
-				this.backend = backend;
 			}
 		}
 
 		[CRepr]
 		public struct DeviceExtras {
-			public ChainedStruct chain;
-			public NativeFeature nativeFeatures;
-			public c_char* label;
-			public c_char* tracePath;
+			public ChainedStruct* chain;
+			public WGPUStringView tracePath;
 
 			public this() {
 				this = default;
 			}
+		}
 
-			public this(ChainedStruct chain, NativeFeature nativeFeatures, c_char* label, c_char* tracePath) {
-				this.chain = chain;
-				this.nativeFeatures = nativeFeatures;
-				this.label = label;
-				this.tracePath = tracePath;
+		[CRepr]
+		public struct NativeLimits {
+			public ChainedStructOut* chain;
+			public uint32 maxPushConstantSize;
+			public uint32 maxNonSamplerBindings;
+
+			public this() {
+				this = default;
 			}
 		}
+
+		[CRepr]
+		public struct PushConstantRange {
+			public ShaderStage* stages;
+			public uint32 start;
+			public uint32 end;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
+		public struct PipelineLayoutExtras {
+			public ChainedStruct* chain;
+			public c_size maxPushConstantSize;
+			public PushConstantRange* pushConstantRanges;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
+		public struct ShaderDefine {
+			public WGPUStringView name;
+			public WGPUStringView value;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
+		public struct ShaderModuleGLSLDescriptor {
+			public ChainedStruct* chain;
+			public ShaderStage stage;
+			public WGPUStringView code;
+			public uint32 defineCount;
+			ShaderDefine* defines;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
+		public struct ShaderModuleDescriptorSpirV {
+			public WGPUStringView label;
+			public uint32 sourceSize;
+			public uint32* source;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
+		public struct RegistryReport {
+			public c_size numAllocated;
+			public c_size numKeptFromUser;
+			public c_size numReleasedFromUser;
+			public c_size elementSize;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
+		public struct HubReport {
+			public RegistryReport adapters;
+			public RegistryReport devices;
+			public RegistryReport queues;
+			public RegistryReport pipelineLayouts;
+			public RegistryReport shaderModules;
+			public RegistryReport bindGroupLayouts;
+			public RegistryReport bindGroups;
+			public RegistryReport commandBuffers;
+			public RegistryReport renderBundles;
+			public RegistryReport renderPipelines;
+			public RegistryReport computePipelines;
+			public RegistryReport pipelineCaches;
+			public RegistryReport querySets;
+			public RegistryReport buffers;
+			public RegistryReport textures;
+			public RegistryReport textureViews;
+			public RegistryReport samplers;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
+		public struct GlobalReport {
+			public RegistryReport surfaces;
+			public HubReport hub;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
+		public struct InstanceEnumerateAdapterOptions {
+			public ChainedStruct* nextInChain;
+			public HubReport hub;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
+		public struct BindGroupEntryExtras {
+			public ChainedStruct* chain;
+			public Buffer* buffers;
+			public c_size bufferCount;
+			public Sampler* samplers;
+			public c_size samplerCount;
+			public TextureView* textureViews;
+			public c_size textureViewCount;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
+		public struct BindGroupLayoutEntryExtras {
+			public ChainedStruct* chain;
+			public uint32 count;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
+		public struct QuerySetDescriptorExtras {
+			public ChainedStruct* chain;
+			public PipelineStatisicName* pipelineStatistics;
+			public c_size pipelineStatisticsCount;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
+		public struct SurfaceConfigurationExtras {
+			public ChainedStruct* chain;
+			public uint32 desiredMaximumFrameLatency;
+
+			public this() {
+				this = default;
+			}
+		}
+
 
 		public function void BufferMapCallback(BufferMapAsyncStatus status, void* userdata);
 		public function void CompilationInfoCallback(CompilationInfoRequestStatus status, CompilationInfo* compilationInfo, void* userdata);
@@ -2770,8 +3021,9 @@ namespace Wgpu {
 		[LinkName("wgpuTextureDestroy")]
 		public static extern void TextureDestroy(Texture texture);
 
+		//wgpu.h
 		[LinkName("wgpuDevicePoll")]
-		public static extern void DevicePoll(Device device, c_bool force_wait);
+		public static extern void DevicePoll(Device device, c_bool wait, uint64* wrappedSubmissionIndex);
 
 		[LinkName("wgpuSetLogCallback")]
 		public static extern void SetLogCallback(LogCallback callback);

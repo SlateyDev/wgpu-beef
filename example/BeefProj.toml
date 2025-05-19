@@ -1,5 +1,5 @@
 FileVersion = 1
-Dependencies = {corlib = "*", Wgpu = "*", GLFW = "*", Wgpu-Glfw = "*", ImGui = "*", ImGuiImplGlfw = "*", Wgpu-Imgui = "*", stb_beef = "*"}
+Dependencies = {corlib = "*", Wgpu = "*", Wgpu-Glfw = "*", stb_beef = "*", GLFW = "*"}
 
 [Project]
 Name = "Example"
