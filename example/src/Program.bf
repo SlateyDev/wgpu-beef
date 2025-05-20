@@ -21,7 +21,7 @@ namespace Example {
 
 			// Wgpu log
 			Wgpu.SetLogLevel(.Info);
-			Wgpu.SetLogCallback((level, msg) => Console.WriteLine("{}: {}", level, StringView(msg)));
+			Wgpu.SetLogCallback((level, msg, userdata) => Console.WriteLine("{}: {}", level, StringView(msg)));
 
 			// Create instance
 			Wgpu.InstanceDescriptor instanceDesc = .() {};
