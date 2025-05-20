@@ -31,7 +31,7 @@ namespace Wgpu {
 						sType = .SurfaceDescriptorFromXlibWindow
 					},
 					display = display,
-					window = win
+					window = (uint32)win
 				};
 				Wgpu.SurfaceDescriptor desc = .() {
 					nextInChain = (Wgpu.ChainedStruct*) &chained
