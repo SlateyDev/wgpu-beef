@@ -21,11 +21,11 @@ namespace Example {
 
 			// Wgpu log
 			Wgpu.wgpuSetLogLevel(.Info);
-			Wgpu.wgpuSetLogCallback((level, msg, userdata) => Console.WriteLine("{}: {}", level, StringView(msg.data)), null);
+			Wgpu.wgpuSetLogCallback((level, msg, userdata) => Console.WriteLine($"{level}: {scope String(msg.data, (int)msg.length)}"), null);
 
 			// Create instance
-			Wgpu.WGPUInstanceDescriptor instanceDesc = .() {};
-			Wgpu.WGPUInstance instance = Wgpu.wgpuCreateInstance(&instanceDesc);
+			//Wgpu.WGPUInstanceDescriptor instanceDesc = .() {};
+			Wgpu.WGPUInstance instance = Wgpu.wgpuCreateInstance(null);
 
 			// Create surface
 			Wgpu.WGPUSurface surface = Wgpu.CreateSurfaceFromGlfw(instance, window);
@@ -33,8 +33,8 @@ namespace Example {
 			// Request adapter
 			Wgpu.WGPURequestAdapterOptions options = .() {
 				compatibleSurface = surface,
-				powerPreference = .HighPerformance,
-				forceFallbackAdapter = Wgpu.WGPUBool_False
+				//powerPreference = .HighPerformance,
+				//forceFallbackAdapter = Wgpu.WGPUBool_False
 			};
 			Wgpu.WGPUAdapter adapter = .Null;
 
@@ -58,21 +58,20 @@ namespace Example {
 			// Get queue
 			Wgpu.WGPUQueue queue = device.GetQueue();
 
-			//// SwapChain
-			//Wgpu.SwapChainDescriptor swapChainDesc = .() {
-			//	usage = .RenderAttachment,
-			//	format = .BGRA8Unorm,
-			//	width = 1280,
-			//	height = 720,
-			//	presentMode = .Fifo
-			//};
-			//Wgpu.SwapChain swapChain = device.CreateSwapChain(surface, &swapChainDesc);
+			Console.WriteLine("Retrieved Queue");
 
-			//Glfw.SetFramebufferSizeCallback(window, new [&](window, width, height) => {
-			//	swapChainDesc.width = (.) width;
-			//	swapChainDesc.height = (.) height;
-			//	swapChain = device.CreateSwapChain(surface, &swapChainDesc);
-			//});
+			Wgpu.WGPUSurfaceConfiguration surfaceConfig = .() {
+				device = device,
+				usage = .RenderAttachment,
+				format = .BGRA8Unorm,
+				width = 1280,
+				height = 720,
+				presentMode = .Fifo,
+				alphaMode = .Opaque
+			};
+			Wgpu.wgpuSurfaceConfigure(surface, &surfaceConfig);
+
+			Console.WriteLine("Surface configured");
 
 			// Texture
 			List<uint8> rawData = scope .();
@@ -165,7 +164,7 @@ namespace Example {
 				chain = .() {
 					sType = .ShaderSourceWGSL
 				},
-				code = WGPUStringView(shaderBuffer)
+				code = Wgpu.WGPUStringView(shaderBuffer)
 			};
 			Wgpu.WGPUShaderModuleDescriptor shaderDesc = .() {
 				nextInChain = (Wgpu.WGPUChainedStruct*) &shaderWgslDesc,
@@ -276,18 +275,42 @@ namespace Example {
 			while (!Glfw.WindowShouldClose(window)) {
 				Glfw.PollEvents();
 
-				Console.WriteLine("Frame");
+				Wgpu.WGPUSurfaceTexture surfaceTexture = .();
+				Wgpu.wgpuSurfaceGetCurrentTexture(surface, &surfaceTexture);
+				switch (surfaceTexture.status) {
+					case .SuccessOptimal, .SuccessSuboptimal:
+						break;
+					case .Timeout, .Outdated, .Lost:
+						// Console.WriteLine("Surface timeout, outdated, or lost");
+						Wgpu.wgpuSurfaceConfigure(surface, &surfaceConfig);
+						continue;
+					case .OutOfMemory, .DeviceLost, .Error:
+						Console.WriteLine("Surface out of memory, device lost, or error");
+						break;
+					default:
+						Console.WriteLine("Surface unknown error");
+						break;
+				}
 
-				Wgpu.WGPUCommandEncoderDescriptor encoderDesc = .();
-
-				Wgpu.WGPUTextureView view = surface.wgpuSurfaceGetCurrentTexture();
-				Wgpu.WGPUCommandEncoder encoder = device.CreateCommandEncoder(&encoderDesc);
+				Wgpu.WGPUTextureViewDescriptor viewDesc = .() {
+					format = .BGRA8Unorm,
+					dimension = ._2D,
+					baseMipLevel = 0,
+					mipLevelCount = 1,
+					baseArrayLayer = 0,
+					arrayLayerCount = 1,
+					aspect = .All
+				};
+				var view = surfaceTexture.texture.CreateView(&viewDesc);
+				
+				Wgpu.WGPUCommandEncoder encoder = device.CreateCommandEncoder(null);
 
 				{
 					Wgpu.WGPURenderPassColorAttachment colorDesc = .() {
 						view = view,
 						loadOp = .Clear,
 						storeOp = .Store,
+						depthSlice = 0xffffffff,
 						clearValue = .(1, 1, 1, 1)
 					};
 					Wgpu.WGPURenderPassDescriptor passDesc = .() {
@@ -299,8 +322,8 @@ namespace Example {
 
 					pass.SetPipeline(pipeline);
 					pass.SetBindGroup(0, bindGroup, 0, null);
-					pass.SetVertexBuffer(0, vertexBuffer, 0, 0);
-					pass.SetIndexBuffer(indexBuffer, .Uint16, 0, 0);
+					pass.SetVertexBuffer(0, vertexBuffer, 0, vertices.Count * sizeof(Vertex));
+					pass.SetIndexBuffer(indexBuffer, .Uint16, 0, indices.Count * sizeof(uint16));
 					pass.DrawIndexed(indices.Count, 1, 0, 0, 0);
 
 					// ImGui
@@ -315,15 +338,19 @@ namespace Example {
 
 					// End render pass
 					pass.End();
+					pass.Release();
 				}
 
 				// Submit
-				Wgpu.WGPUCommandBufferDescriptor cbDesc = .();
-				Wgpu.WGPUCommandBuffer cb = encoder.Finish(&cbDesc);
+				Wgpu.WGPUCommandBuffer cb = encoder.Finish(null);
 				queue.Submit(1, &cb);
+
+				Wgpu.wgpuSurfacePresent(surface);
 				
 				//swapChain.Present();
 				view.Release();
+				surfaceTexture.texture.Release();
+				encoder.Release();
 			}
 
 			// Destroy

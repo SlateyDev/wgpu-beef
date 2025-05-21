@@ -210,6 +210,7 @@ namespace Wgpu {
 			public void SetVertexBuffer(uint32 slot, WGPUBuffer buffer, uint64 offset, uint64 size) => Wgpu.wgpuRenderPassEncoderSetVertexBuffer(this, slot, buffer, offset, size);
 			public void SetViewport(float x, float y, float width, float height, float minDepth, float maxDepth) => Wgpu.wgpuRenderPassEncoderSetViewport(this, x, y, width, height, minDepth, maxDepth);
 			public void SetPushConstants(WGPUShaderStage stages, uint32 offset, uint32 sizeBytes, void* data) => Wgpu.wgpuRenderPassEncoderSetPushConstants(this, stages, offset, sizeBytes, data);
+			public void Release() => Wgpu.wgpuRenderPassEncoderRelease(this);
 		}
 
 		[CRepr]
