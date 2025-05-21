@@ -30,7 +30,7 @@ namespace Example {
 			// Create surface
 			Wgpu.WGPUSurface surface = Wgpu.CreateSurfaceFromGlfw(instance, window);
 
-			// Request adapter
+			/*// Request adapter
 			Wgpu.WGPURequestAdapterOptions options = .() {
 				//compatibleSurface = surface,
 				powerPreference = .HighPerformance,
@@ -256,17 +256,17 @@ namespace Example {
 			//ImGui.StyleColorsDark();
 			//ImGuiImplGlfw.InitForOther(window, true);
 			//ImGuiImplWgpu.Init(device, 3, .BGRA8Unorm);
-
+			*/
 			// Loop
 			while (!Glfw.WindowShouldClose(window)) {
 				Glfw.PollEvents();
 
-				Wgpu.WGPUCommandEncoderDescriptor encoderDesc = .();
+				//Wgpu.WGPUCommandEncoderDescriptor encoderDesc = .();
 
-				Wgpu.WGPUTextureView view = swapChain.GetCurrentTextureView();
-				Wgpu.WGPUCommandEncoder encoder = device.CreateCommandEncoder(&encoderDesc);
+				//Wgpu.WGPUTextureView view = swapChain.GetCurrentTextureView();
+				//Wgpu.WGPUCommandEncoder encoder = device.CreateCommandEncoder(&encoderDesc);
 
-				{
+				/*{
 					Wgpu.WGPURenderPassColorAttachment colorDesc = .() {
 						view = view,
 						loadOp = .Clear,
@@ -298,15 +298,15 @@ namespace Example {
 
 					// End render pass
 					pass.End();
-				}
+				}*/
 
 				// Submit
-				Wgpu.WGPUCommandBufferDescriptor cbDesc = .();
-				Wgpu.WGPUCommandBuffer cb = encoder.Finish(&cbDesc);
-				queue.Submit(1, &cb);
+				//Wgpu.WGPUCommandBufferDescriptor cbDesc = .();
+				//Wgpu.WGPUCommandBuffer cb = encoder.Finish(&cbDesc);
+				//queue.Submit(1, &cb);
 				
-				swapChain.Present();
-				view.Release();
+				//swapChain.Present();
+				//view.Release();
 			}
 
 			// Destroy

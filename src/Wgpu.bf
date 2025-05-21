@@ -3762,6 +3762,7 @@ namespace Wgpu {
 		/**
 		* Create a WGPUInstance
 		*/
+		[LinkName("wgpuCreateInstance")]
 		public static extern WGPUInstance wgpuCreateInstance(WGPUInstanceDescriptor* descriptor);
 		/**
 		* Query the supported instance capabilities.
@@ -3772,11 +3773,13 @@ namespace Wgpu {
 		* @returns
 		* Indicates if there was an @ref OutStructChainError.
 		*/
+		[LinkName("wgpuGetInstanceCapabilities")]
 		public static extern WGPUStatus wgpuGetInstanceCapabilities(WGPUInstanceCapabilities* capabilities);
 		/**
 		* Returns the "procedure address" (function pointer) of the named function.
 		* The result must be cast to the appropriate proc pointer type.
 		*/
+		[LinkName("wgpuGetProcAddress")]
 		public static extern WGPUProc wgpuGetProcAddress(WGPUStringView procName);
 
 		/**
@@ -3794,6 +3797,7 @@ namespace Wgpu {
 		* @param features
 		* This parameter is @ref ReturnedWithOwnership.
 		*/
+		[LinkName("wgpuAdapterGetFeatures")]
 		public static extern void wgpuAdapterGetFeatures(WGPUAdapter adapter, WGPUSupportedFeatures* features);
 		/**
 		* @param info
@@ -3802,15 +3806,21 @@ namespace Wgpu {
 		* @returns
 		* Indicates if there was an @ref OutStructChainError.
 		*/
+		[LinkName("wgpuAdapterGetInfo")]
 		public static extern WGPUStatus wgpuAdapterGetInfo(WGPUAdapter adapter, WGPUAdapterInfo* info);
 		/**
 		* @returns
 		* Indicates if there was an @ref OutStructChainError.
 		*/
+		[LinkName("wgpuAdapterGetLimits")]
 		public static extern WGPUStatus wgpuAdapterGetLimits(WGPUAdapter adapter, WGPULimits* limits);
+		[LinkName("wgpuAdapterHasFeature")]
 		public static extern WGPUBool wgpuAdapterHasFeature(WGPUAdapter adapter, WGPUFeatureName feature);
+		[LinkName("wgpuAdapterRequestDevice")]
 		public static extern WGPUFuture wgpuAdapterRequestDevice(WGPUAdapter adapter, WGPUDeviceDescriptor* descriptor, WGPURequestDeviceCallbackInfo callbackInfo);
+		[LinkName("wgpuAdapterAddRef")]
 		public static extern void wgpuAdapterAddRef(WGPUAdapter adapter);
+		[LinkName("wgpuAdapterRelease")]
 		public static extern void wgpuAdapterRelease(WGPUAdapter adapter);
 
 
@@ -3822,6 +3832,7 @@ namespace Wgpu {
 		/**
 		* Frees array members of WGPUAdapterInfo which were allocated by the API.
 		*/
+		[LinkName("wgpuAdapterInfoFreeMembers")]
 		public static extern void wgpuAdapterInfoFreeMembers(WGPUAdapterInfo adapterInfo);
 
 
@@ -3830,8 +3841,11 @@ namespace Wgpu {
 		* \defgroup WGPUBindGroupMethods WGPUBindGroup methods
 		* \brief Functions whose first argument has type WGPUBindGroup.
 		*/
+		[LinkName("wgpuBindGroupSetLabel")]
 		public static extern void wgpuBindGroupSetLabel(WGPUBindGroup bindGroup, WGPUStringView label);
+		[LinkName("wgpuBindGroupAddRef")]
 		public static extern void wgpuBindGroupAddRef(WGPUBindGroup bindGroup);
+		[LinkName("wgpuBindGroupRelease")]
 		public static extern void wgpuBindGroupRelease(WGPUBindGroup bindGroup);
 
 
@@ -3840,8 +3854,11 @@ namespace Wgpu {
 		* \defgroup WGPUBindGroupLayoutMethods WGPUBindGroupLayout methods
 		* \brief Functions whose first argument has type WGPUBindGroupLayout.
 		*/
+		[LinkName("wgpuBindGroupLayoutSetLabel")]
 		public static extern void wgpuBindGroupLayoutSetLabel(WGPUBindGroupLayout bindGroupLayout, WGPUStringView label);
+		[LinkName("wgpuBindGroupLayoutAddRef")]
 		public static extern void wgpuBindGroupLayoutAddRef(WGPUBindGroupLayout bindGroupLayout);
+		[LinkName("wgpuBindGroupLayoutRelease")]
 		public static extern void wgpuBindGroupLayoutRelease(WGPUBindGroupLayout bindGroupLayout);
 
 
@@ -3850,6 +3867,7 @@ namespace Wgpu {
 		* \defgroup WGPUBufferMethods WGPUBuffer methods
 		* \brief Functions whose first argument has type WGPUBuffer.
 		*/
+		[LinkName("wgpuBufferDestroy")]
 		public static extern void wgpuBufferDestroy(WGPUBuffer buffer);
 		/**
 		* @param offset
@@ -3867,7 +3885,9 @@ namespace Wgpu {
 		*   **except** for overlaps with other *const* ranges, which are allowed in C.
 		*   (JS does not allow this because const ranges do not exist.)
 		*/
+		[LinkName("wgpuBufferGetConstMappedRange")]
 		public static extern void* wgpuBufferGetConstMappedRange(WGPUBuffer buffer, c_size offset, c_size size);
+		[LinkName("wgpuBufferGetMapState")]
 		public static extern WGPUBufferMapState wgpuBufferGetMapState(WGPUBuffer buffer);
 		/**
 		* @param offset
@@ -3883,13 +3903,21 @@ namespace Wgpu {
 		* - There is any content-timeline error as defined in the WebGPU specification for `getMappedRange()` (alignments, overlaps, etc.)
 		* - The buffer is not mapped with @ref WGPUMapMode_Write.
 		*/
+		[LinkName("wgpuBufferGetMappedRange")]
 		public static extern void* wgpuBufferGetMappedRange(WGPUBuffer buffer, c_size offset, c_size size);
+		[LinkName("wgpuBufferGetSize")]
 		public static extern uint64 wgpuBufferGetSize(WGPUBuffer buffer);
+		[LinkName("wgpuBufferGetUsage")]
 		public static extern WGPUBufferUsage wgpuBufferGetUsage(WGPUBuffer buffer);
+		[LinkName("wgpuBufferMapAsync")]
 		public static extern WGPUFuture wgpuBufferMapAsync(WGPUBuffer buffer, WGPUMapMode mode, c_size offset, c_size size, WGPUBufferMapCallbackInfo callbackInfo);
+		[LinkName("wgpuBufferSetLabel")]
 		public static extern void wgpuBufferSetLabel(WGPUBuffer buffer, WGPUStringView label);
+		[LinkName("wgpuBufferUnmap")]
 		public static extern void wgpuBufferUnmap(WGPUBuffer buffer);
+		[LinkName("wgpuBufferAddRef")]
 		public static extern void wgpuBufferAddRef(WGPUBuffer buffer);
+		[LinkName("wgpuBufferRelease")]
 		public static extern void wgpuBufferRelease(WGPUBuffer buffer);
 
 
@@ -3898,8 +3926,11 @@ namespace Wgpu {
 		* \defgroup WGPUCommandBufferMethods WGPUCommandBuffer methods
 		* \brief Functions whose first argument has type WGPUCommandBuffer.
 		*/
+		[LinkName("wgpuCommandBufferSetLabel")]
 		public static extern void wgpuCommandBufferSetLabel(WGPUCommandBuffer commandBuffer, WGPUStringView label);
+		[LinkName("wgpuCommandBufferAddRef")]
 		public static extern void wgpuCommandBufferAddRef(WGPUCommandBuffer commandBuffer);
+		[LinkName("wgpuCommandBufferRelease")]
 		public static extern void wgpuCommandBufferRelease(WGPUCommandBuffer commandBuffer);
 
 
@@ -3908,21 +3939,37 @@ namespace Wgpu {
 		* \defgroup WGPUCommandEncoderMethods WGPUCommandEncoder methods
 		* \brief Functions whose first argument has type WGPUCommandEncoder.
 		*/
+		[LinkName("wgpuCommandEncoderBeginComputePass")]
 		public static extern WGPUComputePassEncoder wgpuCommandEncoderBeginComputePass(WGPUCommandEncoder commandEncoder, WGPUComputePassDescriptor* descriptor);
+		[LinkName("wgpuCommandEncoderBeginRenderPass")]
 		public static extern WGPURenderPassEncoder wgpuCommandEncoderBeginRenderPass(WGPUCommandEncoder commandEncoder, WGPURenderPassDescriptor* descriptor);
+		[LinkName("wgpuCommandEncoderClearBuffer")]
 		public static extern void wgpuCommandEncoderClearBuffer(WGPUCommandEncoder commandEncoder, WGPUBuffer buffer, uint64 offset, uint64 size);
+		[LinkName("wgpuCommandEncoderCopyBufferToBuffer")]
 		public static extern void wgpuCommandEncoderCopyBufferToBuffer(WGPUCommandEncoder commandEncoder, WGPUBuffer source, uint64 sourceOffset, WGPUBuffer destination, uint64 destinationOffset, uint64 size);
+		[LinkName("wgpuCommandEncoderCopyBufferToTexture")]
 		public static extern void wgpuCommandEncoderCopyBufferToTexture(WGPUCommandEncoder commandEncoder, WGPUTexelCopyBufferInfo* source, WGPUTexelCopyTextureInfo* destination, WGPUExtent3D* copySize);
+		[LinkName("wgpuCommandEncoderCopyTextureToBuffer")]
 		public static extern void wgpuCommandEncoderCopyTextureToBuffer(WGPUCommandEncoder commandEncoder, WGPUTexelCopyTextureInfo* source, WGPUTexelCopyBufferInfo* destination, WGPUExtent3D* copySize);
+		[LinkName("wgpuCommandEncoderCopyTextureToTexture")]
 		public static extern void wgpuCommandEncoderCopyTextureToTexture(WGPUCommandEncoder commandEncoder, WGPUTexelCopyTextureInfo* source, WGPUTexelCopyTextureInfo* destination, WGPUExtent3D* copySize);
+		[LinkName("wgpuCommandEncoderFinish")]
 		public static extern WGPUCommandBuffer wgpuCommandEncoderFinish(WGPUCommandEncoder commandEncoder, WGPUCommandBufferDescriptor* descriptor);
+		[LinkName("wgpuCommandEncoderInsertDebugMarker")]
 		public static extern void wgpuCommandEncoderInsertDebugMarker(WGPUCommandEncoder commandEncoder, WGPUStringView markerLabel);
+		[LinkName("wgpuCommandEncoderPopDebugGroup")]
 		public static extern void wgpuCommandEncoderPopDebugGroup(WGPUCommandEncoder commandEncoder);
+		[LinkName("wgpuCommandEncoderPushDebugGroup")]
 		public static extern void wgpuCommandEncoderPushDebugGroup(WGPUCommandEncoder commandEncoder, WGPUStringView groupLabel);
+		[LinkName("wgpuCommandEncoderResolveQuerySet")]
 		public static extern void wgpuCommandEncoderResolveQuerySet(WGPUCommandEncoder commandEncoder, WGPUQuerySet querySet, uint32 firstQuery, uint32 queryCount, WGPUBuffer destination, uint64 destinationOffset);
+		[LinkName("wgpuCommandEncoderSetLabel")]
 		public static extern void wgpuCommandEncoderSetLabel(WGPUCommandEncoder commandEncoder, WGPUStringView label);
+		[LinkName("wgpuCommandEncoderWriteTimestamp")]
 		public static extern void wgpuCommandEncoderWriteTimestamp(WGPUCommandEncoder commandEncoder, WGPUQuerySet querySet, uint32 queryIndex);
+		[LinkName("wgpuCommandEncoderAddRef")]
 		public static extern void wgpuCommandEncoderAddRef(WGPUCommandEncoder commandEncoder);
+		[LinkName("wgpuCommandEncoderRelease")]
 		public static extern void wgpuCommandEncoderRelease(WGPUCommandEncoder commandEncoder);
 
 
@@ -3931,16 +3978,27 @@ namespace Wgpu {
 		* \defgroup WGPUComputePassEncoderMethods WGPUComputePassEncoder methods
 		* \brief Functions whose first argument has type WGPUComputePassEncoder.
 		*/
+		[LinkName("wgpuComputePassEncoderDispatchWorkgroups")]
 		public static extern void wgpuComputePassEncoderDispatchWorkgroups(WGPUComputePassEncoder computePassEncoder, uint32 workgroupCountX, uint32 workgroupCountY, uint32 workgroupCountZ);
+		[LinkName("wgpuComputePassEncoderDispatchWorkgroupsIndirect")]
 		public static extern void wgpuComputePassEncoderDispatchWorkgroupsIndirect(WGPUComputePassEncoder computePassEncoder, WGPUBuffer indirectBuffer, uint64 indirectOffset);
+		[LinkName("wgpuComputePassEncoderEnd")]
 		public static extern void wgpuComputePassEncoderEnd(WGPUComputePassEncoder computePassEncoder);
+		[LinkName("wgpuComputePassEncoderInsertDebugMarker")]
 		public static extern void wgpuComputePassEncoderInsertDebugMarker(WGPUComputePassEncoder computePassEncoder, WGPUStringView markerLabel);
+		[LinkName("wgpuComputePassEncoderPopDebugGroup")]
 		public static extern void wgpuComputePassEncoderPopDebugGroup(WGPUComputePassEncoder computePassEncoder);
+		[LinkName("wgpuComputePassEncoderPushDebugGroup")]
 		public static extern void wgpuComputePassEncoderPushDebugGroup(WGPUComputePassEncoder computePassEncoder, WGPUStringView groupLabel);
+		[LinkName("wgpuComputePassEncoderSetBindGroup")]
 		public static extern void wgpuComputePassEncoderSetBindGroup(WGPUComputePassEncoder computePassEncoder, uint32 groupIndex, WGPUBindGroup group, c_size dynamicOffsetCount, uint32* dynamicOffsets);
+		[LinkName("wgpuComputePassEncoderSetLabel")]
 		public static extern void wgpuComputePassEncoderSetLabel(WGPUComputePassEncoder computePassEncoder, WGPUStringView label);
+		[LinkName("wgpuComputePassEncoderSetPipeline")]
 		public static extern void wgpuComputePassEncoderSetPipeline(WGPUComputePassEncoder computePassEncoder, WGPUComputePipeline pipeline);
+		[LinkName("wgpuComputePassEncoderAddRef")]
 		public static extern void wgpuComputePassEncoderAddRef(WGPUComputePassEncoder computePassEncoder);
+		[LinkName("wgpuComputePassEncoderRelease")]
 		public static extern void wgpuComputePassEncoderRelease(WGPUComputePassEncoder computePassEncoder);
 
 
@@ -3949,9 +4007,13 @@ namespace Wgpu {
 		* \defgroup WGPUComputePipelineMethods WGPUComputePipeline methods
 		* \brief Functions whose first argument has type WGPUComputePipeline.
 		*/
+		[LinkName("wgpuComputePipelineGetBindGroupLayout")]
 		public static extern WGPUBindGroupLayout wgpuComputePipelineGetBindGroupLayout(WGPUComputePipeline computePipeline, uint32 groupIndex);
+		[LinkName("wgpuComputePipelineSetLabel")]
 		public static extern void wgpuComputePipelineSetLabel(WGPUComputePipeline computePipeline, WGPUStringView label);
+		[LinkName("wgpuComputePipelineAddRef")]
 		public static extern void wgpuComputePipelineAddRef(WGPUComputePipeline computePipeline);
+		[LinkName("wgpuComputePipelineRelease")]
 		public static extern void wgpuComputePipelineRelease(WGPUComputePipeline computePipeline);
 
 
@@ -3960,21 +4022,37 @@ namespace Wgpu {
 		* \defgroup WGPUDeviceMethods WGPUDevice methods
 		* \brief Functions whose first argument has type WGPUDevice.
 		*/
+		[LinkName("wgpuDeviceCreateBindGroup")]
 		public static extern WGPUBindGroup wgpuDeviceCreateBindGroup(WGPUDevice device, WGPUBindGroupDescriptor* descriptor);
+		[LinkName("wgpuDeviceCreateBindGroupLayout")]
 		public static extern WGPUBindGroupLayout wgpuDeviceCreateBindGroupLayout(WGPUDevice device, WGPUBindGroupLayoutDescriptor* descriptor);
+		[LinkName("wgpuDeviceCreateBuffer")]
 		public static extern WGPUBuffer wgpuDeviceCreateBuffer(WGPUDevice device, WGPUBufferDescriptor* descriptor);
+		[LinkName("wgpuDeviceCreateCommandEncoder")]
 		public static extern WGPUCommandEncoder wgpuDeviceCreateCommandEncoder(WGPUDevice device, WGPUCommandEncoderDescriptor* descriptor);
+		[LinkName("wgpuDeviceCreateComputePipeline")]
 		public static extern WGPUComputePipeline wgpuDeviceCreateComputePipeline(WGPUDevice device, WGPUComputePipelineDescriptor* descriptor);
+		[LinkName("wgpuDeviceCreateComputePipelineAsync")]
 		public static extern WGPUFuture wgpuDeviceCreateComputePipelineAsync(WGPUDevice device, WGPUComputePipelineDescriptor* descriptor, WGPUCreateComputePipelineAsyncCallbackInfo callbackInfo);
+		[LinkName("wgpuDeviceCreatePipelineLayout")]
 		public static extern WGPUPipelineLayout wgpuDeviceCreatePipelineLayout(WGPUDevice device, WGPUPipelineLayoutDescriptor* descriptor);
+		[LinkName("wgpuDeviceCreateQuerySet")]
 		public static extern WGPUQuerySet wgpuDeviceCreateQuerySet(WGPUDevice device, WGPUQuerySetDescriptor* descriptor);
+		[LinkName("wgpuDeviceCreateRenderBundleEncoder")]
 		public static extern WGPURenderBundleEncoder wgpuDeviceCreateRenderBundleEncoder(WGPUDevice device, WGPURenderBundleEncoderDescriptor* descriptor);
+		[LinkName("wgpuDeviceCreateRenderPipeline")]
 		public static extern WGPURenderPipeline wgpuDeviceCreateRenderPipeline(WGPUDevice device, WGPURenderPipelineDescriptor* descriptor);
+		[LinkName("wgpuDeviceCreateRenderPipelineAsync")]
 		public static extern WGPUFuture wgpuDeviceCreateRenderPipelineAsync(WGPUDevice device, WGPURenderPipelineDescriptor* descriptor, WGPUCreateRenderPipelineAsyncCallbackInfo callbackInfo);
+		[LinkName("wgpuDeviceCreateSampler")]
 		public static extern WGPUSampler wgpuDeviceCreateSampler(WGPUDevice device, WGPUSamplerDescriptor* descriptor);
+		[LinkName("wgpuDeviceCreateShaderModule")]
 		public static extern WGPUShaderModule wgpuDeviceCreateShaderModule(WGPUDevice device, WGPUShaderModuleDescriptor* descriptor);
+		[LinkName("wgpuDeviceCreateTexture")]
 		public static extern WGPUTexture wgpuDeviceCreateTexture(WGPUDevice device, WGPUTextureDescriptor* descriptor);
+		[LinkName("wgpuDeviceDestroy")]
 		public static extern void wgpuDeviceDestroy(WGPUDevice device);
+		[LinkName("wgpuDeviceGetAdapterInfo")]
 		public static extern WGPUAdapterInfo wgpuDeviceGetAdapterInfo(WGPUDevice device);
 		/**
 		* Get the list of @ref WGPUFeatureName values supported by the device.
@@ -3982,23 +4060,33 @@ namespace Wgpu {
 		* @param features
 		* This parameter is @ref ReturnedWithOwnership.
 		*/
+		[LinkName("wgpuDeviceGetFeatures")]
 		public static extern void wgpuDeviceGetFeatures(WGPUDevice device, WGPUSupportedFeatures* features);
 		/**
 		* @returns
 		* Indicates if there was an @ref OutStructChainError.
 		*/
+		[LinkName("wgpuDeviceGetLimits")]
 		public static extern WGPUStatus wgpuDeviceGetLimits(WGPUDevice device, WGPULimits* limits);
 		/**
 		* @returns
 		* The @ref WGPUFuture for the device-lost event of the device.
 		*/
+		[LinkName("wgpuDeviceGetLostFuture")]
 		public static extern WGPUFuture wgpuDeviceGetLostFuture(WGPUDevice device);
+		[LinkName("wgpuDeviceGetQueue")]
 		public static extern WGPUQueue wgpuDeviceGetQueue(WGPUDevice device);
+		[LinkName("wgpuDeviceHasFeature")]
 		public static extern WGPUBool wgpuDeviceHasFeature(WGPUDevice device, WGPUFeatureName feature);
+		[LinkName("wgpuDevicePopErrorScope")]
 		public static extern WGPUFuture wgpuDevicePopErrorScope(WGPUDevice device, WGPUPopErrorScopeCallbackInfo callbackInfo);
+		[LinkName("wgpuDevicePushErrorScope")]
 		public static extern void wgpuDevicePushErrorScope(WGPUDevice device, WGPUErrorFilter filter);
+		[LinkName("wgpuDeviceSetLabel")]
 		public static extern void wgpuDeviceSetLabel(WGPUDevice device, WGPUStringView label);
+		[LinkName("wgpuDeviceAddRef")]
 		public static extern void wgpuDeviceAddRef(WGPUDevice device);
+		[LinkName("wgpuDeviceRelease")]
 		public static extern void wgpuDeviceRelease(WGPUDevice device);
 
 
@@ -4016,26 +4104,34 @@ namespace Wgpu {
 		* @returns
 		* A new @ref WGPUSurface for this descriptor (or an error @ref WGPUSurface).
 		*/
+		[LinkName("wgpuInstanceCreateSurface")]
 		public static extern WGPUSurface wgpuInstanceCreateSurface(WGPUInstance instance, WGPUSurfaceDescriptor* descriptor);
 		/**
 		* Get the list of @ref WGPUWGSLLanguageFeatureName values supported by the instance.
 		*/
+		[LinkName("wgpuInstanceGetWGSLLanguageFeatures")]
 		public static extern WGPUStatus wgpuInstanceGetWGSLLanguageFeatures(WGPUInstance instance, WGPUSupportedWGSLLanguageFeatures* features);
+		[LinkName("wgpuInstanceHasWGSLLanguageFeature")]
 		public static extern WGPUBool wgpuInstanceHasWGSLLanguageFeature(WGPUInstance instance, WGPUWGSLLanguageFeatureName feature);
 		/**
 		* Processes asynchronous events on this `WGPUInstance`, calling any callbacks for asynchronous operations created with `::WGPUCallbackMode_AllowProcessEvents`.
 		*
 		* See @ref Process-Events for more information.
 		*/
+		[LinkName("wgpuInstanceProcessEvents")]
 		public static extern void wgpuInstanceProcessEvents(WGPUInstance instance);
+		[LinkName("wgpuInstanceRequestAdapter")]
 		public static extern WGPUFuture wgpuInstanceRequestAdapter(WGPUInstance instance, WGPURequestAdapterOptions* options, WGPURequestAdapterCallbackInfo callbackInfo);
 		/**
 		* Wait for at least one WGPUFuture in `futures` to complete, and call callbacks of the respective completed asynchronous operations.
 		*
 		* See @ref Wait-Any for more information.
 		*/
+		[LinkName("wgpuInstanceWaitAny")]
 		public static extern WGPUWaitStatus wgpuInstanceWaitAny(WGPUInstance instance, c_size futureCount, WGPUFutureWaitInfo* futures, uint64 timeoutNS);
+		[LinkName("wgpuInstanceAddRef")]
 		public static extern void wgpuInstanceAddRef(WGPUInstance instance);
+		[LinkName("wgpuInstanceRelease")]
 		public static extern void wgpuInstanceRelease(WGPUInstance instance);
 
 
@@ -4044,8 +4140,11 @@ namespace Wgpu {
 		* \defgroup WGPUPipelineLayoutMethods WGPUPipelineLayout methods
 		* \brief Functions whose first argument has type WGPUPipelineLayout.
 		*/
+		[LinkName("wgpuPipelineLayoutSetLabel")]
 		public static extern void wgpuPipelineLayoutSetLabel(WGPUPipelineLayout pipelineLayout, WGPUStringView label);
+		[LinkName("wgpuPipelineLayoutAddRef")]
 		public static extern void wgpuPipelineLayoutAddRef(WGPUPipelineLayout pipelineLayout);
+		[LinkName("wgpuPipelineLayoutRelease")]
 		public static extern void wgpuPipelineLayoutRelease(WGPUPipelineLayout pipelineLayout);
 
 
@@ -4054,11 +4153,17 @@ namespace Wgpu {
 		* \defgroup WGPUQuerySetMethods WGPUQuerySet methods
 		* \brief Functions whose first argument has type WGPUQuerySet.
 		*/
+		[LinkName("wgpuQuerySetDestroy")]
 		public static extern void wgpuQuerySetDestroy(WGPUQuerySet querySet);
+		[LinkName("wgpuQuerySetGetCount")]
 		public static extern uint32 wgpuQuerySetGetCount(WGPUQuerySet querySet);
+		[LinkName("wgpuQuerySetGetType")]
 		public static extern WGPUQueryType wgpuQuerySetGetType(WGPUQuerySet querySet);
+		[LinkName("wgpuQuerySetSetLabel")]
 		public static extern void wgpuQuerySetSetLabel(WGPUQuerySet querySet, WGPUStringView label);
+		[LinkName("wgpuQuerySetAddRef")]
 		public static extern void wgpuQuerySetAddRef(WGPUQuerySet querySet);
+		[LinkName("wgpuQuerySetRelease")]
 		public static extern void wgpuQuerySetRelease(WGPUQuerySet querySet);
 
 
@@ -4067,16 +4172,23 @@ namespace Wgpu {
 		* \defgroup WGPUQueueMethods WGPUQueue methods
 		* \brief Functions whose first argument has type WGPUQueue.
 		*/
+		[LinkName("wgpuQueueOnSubmittedWorkDone")]
 		public static extern WGPUFuture wgpuQueueOnSubmittedWorkDone(WGPUQueue queue, WGPUQueueWorkDoneCallbackInfo callbackInfo);
+		[LinkName("wgpuQueueSetLabel")]
 		public static extern void wgpuQueueSetLabel(WGPUQueue queue, WGPUStringView label);
+		[LinkName("wgpuQueueSubmit")]
 		public static extern void wgpuQueueSubmit(WGPUQueue queue, c_size commandCount, WGPUCommandBuffer* commands);
 		/**
 		* Produces a @ref DeviceError both content-timeline (`size` alignment) and device-timeline
 		* errors defined by the WebGPU specification.
 		*/
+		[LinkName("wgpuQueueWriteBuffer")]
 		public static extern void wgpuQueueWriteBuffer(WGPUQueue queue, WGPUBuffer buffer, uint64 bufferOffset, void* data, c_size size);
+		[LinkName("wgpuQueueWriteTexture")]
 		public static extern void wgpuQueueWriteTexture(WGPUQueue queue, WGPUTexelCopyTextureInfo* destination, void* data, c_size dataSize, WGPUTexelCopyBufferLayout* dataLayout, WGPUExtent3D* writeSize);
+		[LinkName("wgpuQueueAddRef")]
 		public static extern void wgpuQueueAddRef(WGPUQueue queue);
+		[LinkName("wgpuQueueRelease")]
 		public static extern void wgpuQueueRelease(WGPUQueue queue);
 
 
@@ -4085,8 +4197,11 @@ namespace Wgpu {
 		* \defgroup WGPURenderBundleMethods WGPURenderBundle methods
 		* \brief Functions whose first argument has type WGPURenderBundle.
 		*/
+		[LinkName("wgpuRenderBundleSetLabel")]
 		public static extern void wgpuRenderBundleSetLabel(WGPURenderBundle renderBundle, WGPUStringView label);
+		[LinkName("wgpuRenderBundleAddRef")]
 		public static extern void wgpuRenderBundleAddRef(WGPURenderBundle renderBundle);
+		[LinkName("wgpuRenderBundleRelease")]
 		public static extern void wgpuRenderBundleRelease(WGPURenderBundle renderBundle);
 
 
@@ -4095,20 +4210,35 @@ namespace Wgpu {
 		* \defgroup WGPURenderBundleEncoderMethods WGPURenderBundleEncoder methods
 		* \brief Functions whose first argument has type WGPURenderBundleEncoder.
 		*/
+		[LinkName("wgpuRenderBundleEncoderDraw")]
 		public static extern void wgpuRenderBundleEncoderDraw(WGPURenderBundleEncoder renderBundleEncoder, uint32 vertexCount, uint32 instanceCount, uint32 firstVertex, uint32 firstInstance);
+		[LinkName("wgpuRenderBundleEncoderDrawIndexed")]
 		public static extern void wgpuRenderBundleEncoderDrawIndexed(WGPURenderBundleEncoder renderBundleEncoder, uint32 indexCount, uint32 instanceCount, uint32 firstIndex, int32 baseVertex, uint32 firstInstance);
+		[LinkName("wgpuRenderBundleEncoderDrawIndexedIndirect")]
 		public static extern void wgpuRenderBundleEncoderDrawIndexedIndirect(WGPURenderBundleEncoder renderBundleEncoder, WGPUBuffer indirectBuffer, uint64 indirectOffset);
+		[LinkName("wgpuRenderBundleEncoderDrawIndirect")]
 		public static extern void wgpuRenderBundleEncoderDrawIndirect(WGPURenderBundleEncoder renderBundleEncoder, WGPUBuffer indirectBuffer, uint64 indirectOffset);
+		[LinkName("wgpuRenderBundleEncoderFinish")]
 		public static extern WGPURenderBundle wgpuRenderBundleEncoderFinish(WGPURenderBundleEncoder renderBundleEncoder, WGPURenderBundleDescriptor* descriptor);
+		[LinkName("wgpuRenderBundleEncoderInsertDebugMarker")]
 		public static extern void wgpuRenderBundleEncoderInsertDebugMarker(WGPURenderBundleEncoder renderBundleEncoder, WGPUStringView markerLabel);
+		[LinkName("wgpuRenderBundleEncoderPopDebugGroup")]
 		public static extern void wgpuRenderBundleEncoderPopDebugGroup(WGPURenderBundleEncoder renderBundleEncoder);
+		[LinkName("wgpuRenderBundleEncoderPushDebugGroup")]
 		public static extern void wgpuRenderBundleEncoderPushDebugGroup(WGPURenderBundleEncoder renderBundleEncoder, WGPUStringView groupLabel);
+		[LinkName("wgpuRenderBundleEncoderSetBindGroup")]
 		public static extern void wgpuRenderBundleEncoderSetBindGroup(WGPURenderBundleEncoder renderBundleEncoder, uint32 groupIndex, WGPUBindGroup group, c_size dynamicOffsetCount, uint32* dynamicOffsets);
+		[LinkName("wgpuRenderBundleEncoderSetIndexBuffer")]
 		public static extern void wgpuRenderBundleEncoderSetIndexBuffer(WGPURenderBundleEncoder renderBundleEncoder, WGPUBuffer buffer, WGPUIndexFormat format, uint64 offset, uint64 size);
+		[LinkName("wgpuRenderBundleEncoderSetLabel")]
 		public static extern void wgpuRenderBundleEncoderSetLabel(WGPURenderBundleEncoder renderBundleEncoder, WGPUStringView label);
+		[LinkName("wgpuRenderBundleEncoderSetPipeline")]
 		public static extern void wgpuRenderBundleEncoderSetPipeline(WGPURenderBundleEncoder renderBundleEncoder, WGPURenderPipeline pipeline);
+		[LinkName("wgpuRenderBundleEncoderSetVertexBuffer")]
 		public static extern void wgpuRenderBundleEncoderSetVertexBuffer(WGPURenderBundleEncoder renderBundleEncoder, uint32 slot, WGPUBuffer buffer, uint64 offset, uint64 size);
+		[LinkName("wgpuRenderBundleEncoderAddRef")]
 		public static extern void wgpuRenderBundleEncoderAddRef(WGPURenderBundleEncoder renderBundleEncoder);
+		[LinkName("wgpuRenderBundleEncoderRelease")]
 		public static extern void wgpuRenderBundleEncoderRelease(WGPURenderBundleEncoder renderBundleEncoder);
 
 
@@ -4117,27 +4247,49 @@ namespace Wgpu {
 		* \defgroup WGPURenderPassEncoderMethods WGPURenderPassEncoder methods
 		* \brief Functions whose first argument has type WGPURenderPassEncoder.
 		*/
+		[LinkName("wgpuRenderPassEncoderBeginOcclusionQuery")]
 		public static extern void wgpuRenderPassEncoderBeginOcclusionQuery(WGPURenderPassEncoder renderPassEncoder, uint32 queryIndex);
+		[LinkName("wgpuRenderPassEncoderDraw")]
 		public static extern void wgpuRenderPassEncoderDraw(WGPURenderPassEncoder renderPassEncoder, uint32 vertexCount, uint32 instanceCount, uint32 firstVertex, uint32 firstInstance);
+		[LinkName("wgpuRenderPassEncoderDrawIndexed")]
 		public static extern void wgpuRenderPassEncoderDrawIndexed(WGPURenderPassEncoder renderPassEncoder, uint32 indexCount, uint32 instanceCount, uint32 firstIndex, int32 baseVertex, uint32 firstInstance);
+		[LinkName("wgpuRenderPassEncoderDrawIndexedIndirect")]
 		public static extern void wgpuRenderPassEncoderDrawIndexedIndirect(WGPURenderPassEncoder renderPassEncoder, WGPUBuffer indirectBuffer, uint64 indirectOffset);
+		[LinkName("wgpuRenderPassEncoderDrawIndirect")]
 		public static extern void wgpuRenderPassEncoderDrawIndirect(WGPURenderPassEncoder renderPassEncoder, WGPUBuffer indirectBuffer, uint64 indirectOffset);
+		[LinkName("wgpuRenderPassEncoderEnd")]
 		public static extern void wgpuRenderPassEncoderEnd(WGPURenderPassEncoder renderPassEncoder);
+		[LinkName("wgpuRenderPassEncoderEndOcclusionQuery")]
 		public static extern void wgpuRenderPassEncoderEndOcclusionQuery(WGPURenderPassEncoder renderPassEncoder);
+		[LinkName("wgpuRenderPassEncoderExecuteBundles")]
 		public static extern void wgpuRenderPassEncoderExecuteBundles(WGPURenderPassEncoder renderPassEncoder, c_size bundleCount, WGPURenderBundle* bundles);
+		[LinkName("wgpuRenderPassEncoderInsertDebugMarker")]
 		public static extern void wgpuRenderPassEncoderInsertDebugMarker(WGPURenderPassEncoder renderPassEncoder, WGPUStringView markerLabel);
+		[LinkName("wgpuRenderPassEncoderPopDebugGroup")]
 		public static extern void wgpuRenderPassEncoderPopDebugGroup(WGPURenderPassEncoder renderPassEncoder);
+		[LinkName("wgpuRenderPassEncoderPushDebugGroup")]
 		public static extern void wgpuRenderPassEncoderPushDebugGroup(WGPURenderPassEncoder renderPassEncoder, WGPUStringView groupLabel);
+		[LinkName("wgpuRenderPassEncoderSetBindGroup")]
 		public static extern void wgpuRenderPassEncoderSetBindGroup(WGPURenderPassEncoder renderPassEncoder, uint32 groupIndex, WGPUBindGroup group, c_size dynamicOffsetCount, uint32* dynamicOffsets);
+		[LinkName("wgpuRenderPassEncoderSetBlendConstant")]
 		public static extern void wgpuRenderPassEncoderSetBlendConstant(WGPURenderPassEncoder renderPassEncoder, WGPUColor* color);
+		[LinkName("wgpuRenderPassEncoderSetIndexBuffer")]
 		public static extern void wgpuRenderPassEncoderSetIndexBuffer(WGPURenderPassEncoder renderPassEncoder, WGPUBuffer buffer, WGPUIndexFormat format, uint64 offset, uint64 size);
+		[LinkName("wgpuRenderPassEncoderSetLabel")]
 		public static extern void wgpuRenderPassEncoderSetLabel(WGPURenderPassEncoder renderPassEncoder, WGPUStringView label);
+		[LinkName("wgpuRenderPassEncoderSetPipeline")]
 		public static extern void wgpuRenderPassEncoderSetPipeline(WGPURenderPassEncoder renderPassEncoder, WGPURenderPipeline pipeline);
+		[LinkName("wgpuRenderPassEncoderSetScissorRect")]
 		public static extern void wgpuRenderPassEncoderSetScissorRect(WGPURenderPassEncoder renderPassEncoder, uint32 x, uint32 y, uint32 width, uint32 height);
+		[LinkName("wgpuRenderPassEncoderSetStencilReference")]
 		public static extern void wgpuRenderPassEncoderSetStencilReference(WGPURenderPassEncoder renderPassEncoder, uint32 reference);
+		[LinkName("wgpuRenderPassEncoderSetVertexBuffer")]
 		public static extern void wgpuRenderPassEncoderSetVertexBuffer(WGPURenderPassEncoder renderPassEncoder, uint32 slot, WGPUBuffer buffer, uint64 offset, uint64 size);
+		[LinkName("wgpuRenderPassEncoderSetViewport")]
 		public static extern void wgpuRenderPassEncoderSetViewport(WGPURenderPassEncoder renderPassEncoder, float x, float y, float width, float height, float minDepth, float maxDepth);
+		[LinkName("wgpuRenderPassEncoderAddRef")]
 		public static extern void wgpuRenderPassEncoderAddRef(WGPURenderPassEncoder renderPassEncoder);
+		[LinkName("wgpuRenderPassEncoderRelease")]
 		public static extern void wgpuRenderPassEncoderRelease(WGPURenderPassEncoder renderPassEncoder);
 
 
@@ -4146,9 +4298,13 @@ namespace Wgpu {
 		* \defgroup WGPURenderPipelineMethods WGPURenderPipeline methods
 		* \brief Functions whose first argument has type WGPURenderPipeline.
 		*/
+		[LinkName("wgpuRenderPipelineGetBindGroupLayout")]
 		public static extern WGPUBindGroupLayout wgpuRenderPipelineGetBindGroupLayout(WGPURenderPipeline renderPipeline, uint32 groupIndex);
+		[LinkName("wgpuRenderPipelineSetLabel")]
 		public static extern void wgpuRenderPipelineSetLabel(WGPURenderPipeline renderPipeline, WGPUStringView label);
+		[LinkName("wgpuRenderPipelineAddRef")]
 		public static extern void wgpuRenderPipelineAddRef(WGPURenderPipeline renderPipeline);
+		[LinkName("wgpuRenderPipelineRelease")]
 		public static extern void wgpuRenderPipelineRelease(WGPURenderPipeline renderPipeline);
 
 
@@ -4157,8 +4313,11 @@ namespace Wgpu {
 		* \defgroup WGPUSamplerMethods WGPUSampler methods
 		* \brief Functions whose first argument has type WGPUSampler.
 		*/
+		[LinkName("wgpuSamplerSetLabel")]
 		public static extern void wgpuSamplerSetLabel(WGPUSampler sampler, WGPUStringView label);
+		[LinkName("wgpuSamplerAddRef")]
 		public static extern void wgpuSamplerAddRef(WGPUSampler sampler);
+		[LinkName("wgpuSamplerRelease")]
 		public static extern void wgpuSamplerRelease(WGPUSampler sampler);
 
 
@@ -4167,9 +4326,13 @@ namespace Wgpu {
 		* \defgroup WGPUShaderModuleMethods WGPUShaderModule methods
 		* \brief Functions whose first argument has type WGPUShaderModule.
 		*/
+		[LinkName("wgpuShaderModuleGetCompilationInfo")]
 		public static extern WGPUFuture wgpuShaderModuleGetCompilationInfo(WGPUShaderModule shaderModule, WGPUCompilationInfoCallbackInfo callbackInfo);
+		[LinkName("wgpuShaderModuleSetLabel")]
 		public static extern void wgpuShaderModuleSetLabel(WGPUShaderModule shaderModule, WGPUStringView label);
+		[LinkName("wgpuShaderModuleAddRef")]
 		public static extern void wgpuShaderModuleAddRef(WGPUShaderModule shaderModule);
+		[LinkName("wgpuShaderModuleRelease")]
 		public static extern void wgpuShaderModuleRelease(WGPUShaderModule shaderModule);
 
 
@@ -4181,6 +4344,7 @@ namespace Wgpu {
 		/**
 		* Frees array members of WGPUSupportedFeatures which were allocated by the API.
 		*/
+		[LinkName("wgpuSupportedFeaturesFreeMembers")]
 		public static extern void wgpuSupportedFeaturesFreeMembers(WGPUSupportedFeatures supportedFeatures);
 
 
@@ -4192,6 +4356,7 @@ namespace Wgpu {
 		/**
 		* Frees array members of WGPUSupportedWGSLLanguageFeatures which were allocated by the API.
 		*/
+		[LinkName("wgpuSupportedWGSLLanguageFeaturesFreeMembers")]
 		public static extern void wgpuSupportedWGSLLanguageFeaturesFreeMembers(WGPUSupportedWGSLLanguageFeatures supportedWGSLLanguageFeatures);
 
 
@@ -4209,6 +4374,7 @@ namespace Wgpu {
 		* @param config
 		* The new configuration to use.
 		*/
+		[LinkName("wgpuSurfaceConfigure")]
 		public static extern void wgpuSurfaceConfigure(WGPUSurface surface, WGPUSurfaceConfiguration* config);
 		/**
 		* Provides information on how `adapter` is able to use `surface`.
@@ -4225,6 +4391,7 @@ namespace Wgpu {
 		* @returns
 		* Indicates if there was an @ref OutStructChainError.
 		*/
+		[LinkName("wgpuSurfaceGetCapabilities")]
 		public static extern WGPUStatus wgpuSurfaceGetCapabilities(WGPUSurface surface, WGPUAdapter adapter, WGPUSurfaceCapabilities* capabilities);
 		/**
 		* Returns the @ref WGPUTexture to render to `surface` this frame along with metadata on the frame.
@@ -4235,6 +4402,7 @@ namespace Wgpu {
 		* @param surfaceTexture
 		* The structure to fill the @ref WGPUTexture and metadata in.
 		*/
+		[LinkName("wgpuSurfaceGetCurrentTexture")]
 		public static extern void wgpuSurfaceGetCurrentTexture(WGPUSurface surface, WGPUSurfaceTexture* surfaceTexture);
 		/**
 		* Shows `surface`'s current texture to the user.
@@ -4243,6 +4411,7 @@ namespace Wgpu {
 		* @returns
 		* Returns @ref WGPUStatus_Error if the surface doesn't have a current texture.
 		*/
+		[LinkName("wgpuSurfacePresent")]
 		public static extern WGPUStatus wgpuSurfacePresent(WGPUSurface surface);
 		/**
 		* Modifies the label used to refer to `surface`.
@@ -4250,13 +4419,17 @@ namespace Wgpu {
 		* @param label
 		* The new label.
 		*/
+		[LinkName("wgpuSurfaceSetLabel")]
 		public static extern void wgpuSurfaceSetLabel(WGPUSurface surface, WGPUStringView label);
 		/**
 		* Removes the configuration for `surface`.
 		* See @ref Surface-Configuration for more details.
 		*/
+		[LinkName("wgpuSurfaceUnconfigure")]
 		public static extern void wgpuSurfaceUnconfigure(WGPUSurface surface);
+		[LinkName("wgpuSurfaceAddRef")]
 		public static extern void wgpuSurfaceAddRef(WGPUSurface surface);
+		[LinkName("wgpuSurfaceRelease")]
 		public static extern void wgpuSurfaceRelease(WGPUSurface surface);
 
 
@@ -4268,6 +4441,7 @@ namespace Wgpu {
 		/**
 		* Frees array members of WGPUSurfaceCapabilities which were allocated by the API.
 		*/
+		[LinkName("wgpuSurfaceCapabilitiesFreeMembers")]
 		public static extern void wgpuSurfaceCapabilitiesFreeMembers(WGPUSurfaceCapabilities surfaceCapabilities);
 
 
@@ -4276,18 +4450,31 @@ namespace Wgpu {
 		* \defgroup WGPUTextureMethods WGPUTexture methods
 		* \brief Functions whose first argument has type WGPUTexture.
 		*/
+		[LinkName("wgpuTextureCreateView")]
 		public static extern WGPUTextureView wgpuTextureCreateView(WGPUTexture texture, WGPUTextureViewDescriptor* descriptor);
+		[LinkName("wgpuTextureDestroy")]
 		public static extern void wgpuTextureDestroy(WGPUTexture texture);
+		[LinkName("wgpuTextureGetDepthOrArrayLayers")]
 		public static extern uint32 wgpuTextureGetDepthOrArrayLayers(WGPUTexture texture);
+		[LinkName("wgpuTextureGetDimension")]
 		public static extern WGPUTextureDimension wgpuTextureGetDimension(WGPUTexture texture);
+		[LinkName("wgpuTextureGetFormat")]
 		public static extern WGPUTextureFormat wgpuTextureGetFormat(WGPUTexture texture);
+		[LinkName("wgpuTextureGetHeight")]
 		public static extern uint32 wgpuTextureGetHeight(WGPUTexture texture);
+		[LinkName("wgpuTextureGetMipLevelCount")]
 		public static extern uint32 wgpuTextureGetMipLevelCount(WGPUTexture texture);
+		[LinkName("wgpuTextureGetSampleCount")]
 		public static extern uint32 wgpuTextureGetSampleCount(WGPUTexture texture);
+		[LinkName("wgpuTextureGetUsage")]
 		public static extern WGPUTextureUsage wgpuTextureGetUsage(WGPUTexture texture);
+		[LinkName("wgpuTextureGetWidth")]
 		public static extern uint32 wgpuTextureGetWidth(WGPUTexture texture);
+		[LinkName("wgpuTextureSetLabel")]
 		public static extern void wgpuTextureSetLabel(WGPUTexture texture, WGPUStringView label);
+		[LinkName("wgpuTextureAddRef")]
 		public static extern void wgpuTextureAddRef(WGPUTexture texture);
+		[LinkName("wgpuTextureRelease")]
 		public static extern void wgpuTextureRelease(WGPUTexture texture);
 
 
@@ -4296,33 +4483,58 @@ namespace Wgpu {
 		* \defgroup WGPUTextureViewMethods WGPUTextureView methods
 		* \brief Functions whose first argument has type WGPUTextureView.
 		*/
+		[LinkName("wgpuTextureViewSetLabel")]
 		public static extern void wgpuTextureViewSetLabel(WGPUTextureView textureView, WGPUStringView label);
+		[LinkName("wgpuTextureViewAddRef")]
 		public static extern void wgpuTextureViewAddRef(WGPUTextureView textureView);
+		[LinkName("wgpuTextureViewRelease")]
 		public static extern void wgpuTextureViewRelease(WGPUTextureView textureView);
 
 
 
+		[LinkName("wgpuGenerateReport")]
 		public static extern void wgpuGenerateReport(WGPUInstance instance, WGPUGlobalReport* report);
+		[LinkName("wgpuInstanceEnumerateAdapters")]
 		public static extern c_size wgpuInstanceEnumerateAdapters(WGPUInstance instance, WGPUInstanceEnumerateAdapterOptions* options, WGPUAdapter* adapters);
+		[LinkName("wgpuQueueSubmitForIndex")]
 		public static extern WGPUSubmissionIndex wgpuQueueSubmitForIndex(WGPUQueue queue, c_size commandCount, WGPUCommandBuffer* commands);
 		// Returns true if the queue is empty, or false if there are more queue submissions still in flight.
+		[LinkName("wgpuDevicePoll")]
 		public static extern WGPUBool wgpuDevicePoll(WGPUDevice device, WGPUBool wait, WGPUSubmissionIndex* wrappedSubmissionIndex);
+		[LinkName("wgpuDeviceCreateShaderModuleSpirV")]
 		public static extern WGPUShaderModule wgpuDeviceCreateShaderModuleSpirV(WGPUDevice device, WGPUShaderModuleDescriptorSpirV* descriptor);
+		[LinkName("wgpuSetLogCallback")]
 		public static extern void wgpuSetLogCallback(WGPULogCallback callback, void* userdata);
+
+		[LinkName("wgpuSetLogLevel")]
 		public static extern void wgpuSetLogLevel(WGPULogLevel level);
+		[LinkName("wgpuGetVersion")]
 		public static extern uint32 wgpuGetVersion(void);
+		[LinkName("wgpuRenderPassEncoderSetPushConstants")]
 		public static extern void wgpuRenderPassEncoderSetPushConstants(WGPURenderPassEncoder encoder, WGPUShaderStage stages, uint32 offset, uint32 sizeBytes, void* data);
+		[LinkName("wgpuComputePassEncoderSetPushConstants")]
 		public static extern void wgpuComputePassEncoderSetPushConstants(WGPUComputePassEncoder encoder, uint32 offset, uint32 sizeBytes, void* data);
+		[LinkName("wgpuRenderBundleEncoderSetPushConstants")]
 		public static extern void wgpuRenderBundleEncoderSetPushConstants(WGPURenderBundleEncoder encoder, WGPUShaderStage stages, uint32 offset, uint32 sizeBytes, void* data);
+		[LinkName("wgpuRenderPassEncoderMultiDrawIndirect")]
 		public static extern void wgpuRenderPassEncoderMultiDrawIndirect(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64 offset, uint32 count);
+		[LinkName("wgpuRenderPassEncoderMultiDrawIndexedIndirect")]
 		public static extern void wgpuRenderPassEncoderMultiDrawIndexedIndirect(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64 offset, uint32 count);
+		[LinkName("wgpuRenderPassEncoderMultiDrawIndirectCount")]
 		public static extern void wgpuRenderPassEncoderMultiDrawIndirectCount(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64 offset, WGPUBuffer count_buffer, uint64 count_buffer_offset, uint32 max_count);
+		[LinkName("wgpuRenderPassEncoderMultiDrawIndexedIndirectCount")]
 		public static extern void wgpuRenderPassEncoderMultiDrawIndexedIndirectCount(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64 offset, WGPUBuffer count_buffer, uint64 count_buffer_offset, uint32 max_count);
+		[LinkName("wgpuComputePassEncoderBeginPipelineStatisticsQuery")]
 		public static extern void wgpuComputePassEncoderBeginPipelineStatisticsQuery(WGPUComputePassEncoder computePassEncoder, WGPUQuerySet querySet, uint32 queryIndex);
+		[LinkName("wgpuComputePassEncoderEndPipelineStatisticsQuery")]
 		public static extern void wgpuComputePassEncoderEndPipelineStatisticsQuery(WGPUComputePassEncoder computePassEncoder);
+		[LinkName("wgpuRenderPassEncoderBeginPipelineStatisticsQuery")]
 		public static extern void wgpuRenderPassEncoderBeginPipelineStatisticsQuery(WGPURenderPassEncoder renderPassEncoder, WGPUQuerySet querySet, uint32 queryIndex);
+		[LinkName("wgpuRenderPassEncoderEndPipelineStatisticsQuery")]
 		public static extern void wgpuRenderPassEncoderEndPipelineStatisticsQuery(WGPURenderPassEncoder renderPassEncoder);
+		[LinkName("wgpuComputePassEncoderWriteTimestamp")]
 		public static extern void wgpuComputePassEncoderWriteTimestamp(WGPUComputePassEncoder computePassEncoder, WGPUQuerySet querySet, uint32 queryIndex);
+		[LinkName("wgpuRenderPassEncoderWriteTimestamp")]
 		public static extern void wgpuRenderPassEncoderWriteTimestamp(WGPURenderPassEncoder renderPassEncoder, WGPUQuerySet querySet, uint32 queryIndex);
 
 	}
