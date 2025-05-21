@@ -1088,6 +1088,11 @@ namespace Wgpu {
 				this.data = stringView.Ptr;
 				this.length = (size_t)stringView.Length;
 			}
+
+			public this(String str) {
+				this.data = (c_char*)str;
+				this.length = (size_t)str.Length;
+			}
 		}
 
 		/**

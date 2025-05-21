@@ -91,16 +91,27 @@ namespace Example {
 			Wgpu.WGPUTexture texture = device.CreateTextureWithData(queue, &textureDesc, data);
 			stbi.stbi_image_free(data);
 
-			Wgpu.WGPUTextureViewDescriptor textureViewDesc = .();
+			Wgpu.WGPUTextureViewDescriptor textureViewDesc = .() {
+				format = .RGBA8Unorm,
+				dimension = ._2D,
+				baseMipLevel = 0,
+				mipLevelCount = 1,
+				baseArrayLayer = 0,
+				arrayLayerCount = 1,
+				aspect = .All
+			};
 			Wgpu.WGPUTextureView textureView = texture.CreateView(&textureViewDesc);
 
 			// Sampler
 			Wgpu.WGPUSamplerDescriptor samplerDesc = .() {
+				maxAnisotropy = 1,
 				addressModeU = .ClampToEdge,
 				addressModeV = .ClampToEdge,
 				addressModeW = .ClampToEdge,
 				magFilter = .Linear,
 				minFilter = .Linear,
+				lodMinClamp = 0,
+				lodMaxClamp = 32,
 				mipmapFilter = .Nearest
 			};
 			Wgpu.WGPUSampler sampler = device.CreateSampler(&samplerDesc);
@@ -147,15 +158,14 @@ namespace Example {
 			};
 			Wgpu.WGPUBindGroup bindGroup = device.CreateBindGroup(&bindGroupDesc);
 
-			/*
 			// Pipeline
 			String shaderBuffer = scope .();
 			File.ReadAllText("assets/shader.wgsl", shaderBuffer);
-			Wgpu.ShaderModuleWGSLDescriptor shaderWgslDesc = .() {
+			Wgpu.WGPUShaderSourceWGSL shaderWgslDesc = .() {
 				chain = .() {
-					sType = .ShaderModuleWGSLDescriptor
+					sType = .ShaderSourceWGSL
 				},
-				code = shaderBuffer.CStr()
+				code = WGPUStringView(shaderBuffer)
 			};
 			Wgpu.WGPUShaderModuleDescriptor shaderDesc = .() {
 				nextInChain = (Wgpu.WGPUChainedStruct*) &shaderWgslDesc,
@@ -261,17 +271,19 @@ namespace Example {
 			//ImGui.StyleColorsDark();
 			//ImGuiImplGlfw.InitForOther(window, true);
 			//ImGuiImplWgpu.Init(device, 3, .BGRA8Unorm);
-			*/
+
 			// Loop
 			while (!Glfw.WindowShouldClose(window)) {
 				Glfw.PollEvents();
 
-				//Wgpu.WGPUCommandEncoderDescriptor encoderDesc = .();
+				Console.WriteLine("Frame");
 
-				//Wgpu.WGPUTextureView view = swapChain.GetCurrentTextureView();
-				//Wgpu.WGPUCommandEncoder encoder = device.CreateCommandEncoder(&encoderDesc);
+				Wgpu.WGPUCommandEncoderDescriptor encoderDesc = .();
 
-				/*{
+				Wgpu.WGPUTextureView view = surface.wgpuSurfaceGetCurrentTexture();
+				Wgpu.WGPUCommandEncoder encoder = device.CreateCommandEncoder(&encoderDesc);
+
+				{
 					Wgpu.WGPURenderPassColorAttachment colorDesc = .() {
 						view = view,
 						loadOp = .Clear,
@@ -303,15 +315,15 @@ namespace Example {
 
 					// End render pass
 					pass.End();
-				}*/
+				}
 
 				// Submit
-				//Wgpu.WGPUCommandBufferDescriptor cbDesc = .();
-				//Wgpu.WGPUCommandBuffer cb = encoder.Finish(&cbDesc);
-				//queue.Submit(1, &cb);
+				Wgpu.WGPUCommandBufferDescriptor cbDesc = .();
+				Wgpu.WGPUCommandBuffer cb = encoder.Finish(&cbDesc);
+				queue.Submit(1, &cb);
 				
 				//swapChain.Present();
-				//view.Release();
+				view.Release();
 			}
 
 			// Destroy
