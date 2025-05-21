@@ -340,7 +340,6 @@ namespace Wgpu {
 			};
 		}
 
-		//TODO: Fill in the missing default limits
 		extension WGPULimits {
 			public static Self Default() => .() {
 				maxTextureDimension1D = 8192,
@@ -348,8 +347,8 @@ namespace Wgpu {
 				maxTextureDimension3D = 2048,
 				maxTextureArrayLayers = 256,
 				maxBindGroups = 4,
-			//public uint32 maxBindGroupsPlusVertexBuffers;
-			//public uint32 maxBindingsPerBindGroup;
+				maxBindGroupsPlusVertexBuffers = 24,
+				maxBindingsPerBindGroup = 1000,
 				maxDynamicUniformBuffersPerPipelineLayout = 8,
 				maxDynamicStorageBuffersPerPipelineLayout = 4,
 				maxSampledTexturesPerShaderStage = 16,
@@ -362,13 +361,13 @@ namespace Wgpu {
 				minUniformBufferOffsetAlignment = 256,
 				minStorageBufferOffsetAlignment = 256,
 				maxVertexBuffers = 8,
-			//public uint64 maxBufferSize;
+				maxBufferSize = 256 << 20,
 				maxVertexAttributes = 16,
 				maxVertexBufferArrayStride = 2048,
-			//public uint32 maxInterStageShaderVariables;
-			//public uint32 maxColorAttachments;
-			//public uint32 maxColorAttachmentBytesPerSample;
-				maxComputeWorkgroupStorageSize = 16352,
+				maxInterStageShaderVariables = 16,
+				maxColorAttachments = 8,
+				maxColorAttachmentBytesPerSample = 32,
+				maxComputeWorkgroupStorageSize = 16384,
 				maxComputeInvocationsPerWorkgroup = 256,
 				maxComputeWorkgroupSizeX = 256,
 				maxComputeWorkgroupSizeY = 256,
