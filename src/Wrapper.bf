@@ -11,7 +11,7 @@ namespace Wgpu {
 			public WGPUStatus GetLimits(WGPULimits* limits) => Wgpu.wgpuAdapterGetLimits(this, limits);
 			public void GetInfo(WGPUAdapterInfo* info) => Wgpu.wgpuAdapterGetInfo(this, info);
 			public WGPUBool HasFeature(WGPUFeatureName feature) => Wgpu.wgpuAdapterHasFeature(this, feature);
-			public void RequestDevice(WGPUDeviceDescriptor* descriptor, WGPURequestDeviceCallbackInfo callbackInfo, void* userdata) => Wgpu.wgpuAdapterRequestDevice(this, descriptor, callbackInfo);
+			public void RequestDevice(WGPUDeviceDescriptor* descriptor, WGPURequestDeviceCallbackInfo callbackInfo) => Wgpu.wgpuAdapterRequestDevice(this, descriptor, callbackInfo);
 		}
 
 		[CRepr]

@@ -30,45 +30,49 @@ namespace Example {
 			// Create surface
 			Wgpu.WGPUSurface surface = Wgpu.CreateSurfaceFromGlfw(instance, window);
 
-			/*// Request adapter
+			// Request adapter
 			Wgpu.WGPURequestAdapterOptions options = .() {
-				//compatibleSurface = surface,
+				compatibleSurface = surface,
 				powerPreference = .HighPerformance,
 				forceFallbackAdapter = Wgpu.WGPUBool_False
 			};
 			Wgpu.WGPUAdapter adapter = .Null;
-			instance.RequestAdapter(&options, (status, adapter, message, userdata) => *(Wgpu.WGPUAdapter*) userdata = adapter);
+
+			Wgpu.WGPURequestAdapterCallbackInfo requestAdapterCallbackInfo = .() {
+				callback = (status, adapter, message, userdata1, userdata2) => *(Wgpu.WGPUAdapter*) userdata1 = adapter,
+				userdata1 = &adapter
+			};
+			instance.RequestAdapter(&options, requestAdapterCallbackInfo);
 
 			// Request device
-			Wgpu.RequiredLimits limits = .() { limits = .Default() };
-			Wgpu.WGPUDeviceDescriptor deviceDesc = .() {
-				requiredLimits = &limits,
-				defaultQueue = .() {}
-			};
 			Wgpu.WGPUDevice device = .Null;
-			adapter.RequestDevice(&deviceDesc, (status, device, message, userdata) => *(Wgpu.Device*) userdata = device, &device);
+			Wgpu.WGPURequestDeviceCallbackInfo requestDeviceCallbackInfo = .() {
+				callback = (status, device, message, userdata1, userdata2) => *(Wgpu.WGPUDevice*) userdata1 = device,
+				userdata1 = &device
+			};
+			adapter.RequestDevice(null, requestDeviceCallbackInfo);
 
-			// Set error callbacks
-			device.SetUncapturedErrorCallback((type, message, userdata) => Console.WriteLine("{}: {}", type, StringView(message)), null);
+			//// Set error callbacks
+			//device.SetUncapturedErrorCallback((type, message, userdata) => Console.WriteLine("{}: {}", type, StringView(message)), null);
 
 			// Get queue
 			Wgpu.WGPUQueue queue = device.GetQueue();
 
-			// SwapChain
-			Wgpu.SwapChainDescriptor swapChainDesc = .() {
-				usage = .RenderAttachment,
-				format = .BGRA8Unorm,
-				width = 1280,
-				height = 720,
-				presentMode = .Fifo
-			};
-			Wgpu.SwapChain swapChain = device.CreateSwapChain(surface, &swapChainDesc);
+			//// SwapChain
+			//Wgpu.SwapChainDescriptor swapChainDesc = .() {
+			//	usage = .RenderAttachment,
+			//	format = .BGRA8Unorm,
+			//	width = 1280,
+			//	height = 720,
+			//	presentMode = .Fifo
+			//};
+			//Wgpu.SwapChain swapChain = device.CreateSwapChain(surface, &swapChainDesc);
 
-			Glfw.SetFramebufferSizeCallback(window, new [&](window, width, height) => {
-				swapChainDesc.width = (.) width;
-				swapChainDesc.height = (.) height;
-				swapChain = device.CreateSwapChain(surface, &swapChainDesc);
-			});
+			//Glfw.SetFramebufferSizeCallback(window, new [&](window, width, height) => {
+			//	swapChainDesc.width = (.) width;
+			//	swapChainDesc.height = (.) height;
+			//	swapChain = device.CreateSwapChain(surface, &swapChainDesc);
+			//});
 
 			// Texture
 			List<uint8> rawData = scope .();
@@ -143,6 +147,7 @@ namespace Example {
 			};
 			Wgpu.WGPUBindGroup bindGroup = device.CreateBindGroup(&bindGroupDesc);
 
+			/*
 			// Pipeline
 			String shaderBuffer = scope .();
 			File.ReadAllText("assets/shader.wgsl", shaderBuffer);
