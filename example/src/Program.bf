@@ -282,6 +282,10 @@ namespace Example {
 						break;
 					case .Timeout, .Outdated, .Lost:
 						// Console.WriteLine("Surface timeout, outdated, or lost");
+						int width = 0, height = 0;
+						Glfw.GetWindowSize(window, ref width, ref height);
+						surfaceConfig.width = (uint32)width;
+						surfaceConfig.height = (uint32)height;
 						Wgpu.wgpuSurfaceConfigure(surface, &surfaceConfig);
 						continue;
 					case .OutOfMemory, .DeviceLost, .Error:
@@ -347,7 +351,6 @@ namespace Example {
 
 				Wgpu.wgpuSurfacePresent(surface);
 				
-				//swapChain.Present();
 				view.Release();
 				surfaceTexture.texture.Release();
 				encoder.Release();
