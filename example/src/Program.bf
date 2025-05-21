@@ -24,7 +24,6 @@ namespace Example {
 			Wgpu.wgpuSetLogCallback((level, msg, userdata) => Console.WriteLine($"{level}: {scope String(msg.data, (int)msg.length)}"), null);
 
 			// Create instance
-			//Wgpu.WGPUInstanceDescriptor instanceDesc = .() {};
 			Wgpu.WGPUInstance instance = Wgpu.wgpuCreateInstance(null);
 
 			// Create surface
@@ -32,9 +31,7 @@ namespace Example {
 
 			// Request adapter
 			Wgpu.WGPURequestAdapterOptions options = .() {
-				compatibleSurface = surface,
-				//powerPreference = .HighPerformance,
-				//forceFallbackAdapter = Wgpu.WGPUBool_False
+				compatibleSurface = surface
 			};
 			Wgpu.WGPUAdapter adapter = .Null;
 
@@ -69,7 +66,7 @@ namespace Example {
 				presentMode = .Fifo,
 				alphaMode = .Opaque
 			};
-			Wgpu.wgpuSurfaceConfigure(surface, &surfaceConfig);
+			surface.Configure(&surfaceConfig);
 
 			Console.WriteLine("Surface configured");
 
@@ -276,7 +273,7 @@ namespace Example {
 				Glfw.PollEvents();
 
 				Wgpu.WGPUSurfaceTexture surfaceTexture = .();
-				Wgpu.wgpuSurfaceGetCurrentTexture(surface, &surfaceTexture);
+				surface.GetCurrentTexture(&surfaceTexture);
 				switch (surfaceTexture.status) {
 					case .SuccessOptimal, .SuccessSuboptimal:
 						break;
@@ -286,7 +283,7 @@ namespace Example {
 						Glfw.GetWindowSize(window, ref width, ref height);
 						surfaceConfig.width = (uint32)width;
 						surfaceConfig.height = (uint32)height;
-						Wgpu.wgpuSurfaceConfigure(surface, &surfaceConfig);
+						surface.Configure(&surfaceConfig);
 						continue;
 					case .OutOfMemory, .DeviceLost, .Error:
 						Console.WriteLine("Surface out of memory, device lost, or error");
@@ -349,7 +346,7 @@ namespace Example {
 				Wgpu.WGPUCommandBuffer cb = encoder.Finish(null);
 				queue.Submit(1, &cb);
 
-				Wgpu.wgpuSurfacePresent(surface);
+				surface.Present();
 				
 				view.Release();
 				surfaceTexture.texture.Release();
