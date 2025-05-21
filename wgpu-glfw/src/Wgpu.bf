@@ -3,21 +3,21 @@ using GLFW;
 
 namespace Wgpu {
 	extension Wgpu {
-		public static Surface CreateSurfaceFromGlfw(Instance instance, GlfwWindow* window) {
+		public static WGPUSurface CreateSurfaceFromGlfw(WGPUInstance instance, GlfwWindow* window) {
 #if BF_PLATFORM_WINDOWS
 			{
 				Windows.HWnd* hwnd = Glfw.GetWin32Window(window);
 				Windows.HModule module = Windows.GetModuleHandleA(null);
 	
-				Wgpu.SurfaceDescriptorFromWindowsHWND chained = .() {
+				Wgpu.WGPUSurfaceSourceWindowsHWND chained = .() {
 					chain = .() {
-						sType = .SurfaceDescriptorFromWindowsHWND
+						sType = .SurfaceSourceWindowsHWND
 					},
 					hinstance = &module,
 					hwnd = hwnd
 				};
-				Wgpu.SurfaceDescriptor desc = .() {
-					nextInChain = (Wgpu.ChainedStruct*) &chained
+				Wgpu.WGPUSurfaceDescriptor desc = .() {
+					nextInChain = (Wgpu.WGPUChainedStruct*) &chained
 				};
 				return instance.CreateSurface(&desc);
 			}
@@ -26,15 +26,15 @@ namespace Wgpu {
 				Glfw.XDisplay* display = Glfw.GetX11Display();
 				Glfw.XWindow win = Glfw.GetX11Window(window);
 
-				Wgpu.SurfaceDescriptorFromXlibWindow chained = .() {
+				Wgpu.WGPUSurfaceSourceXlibWindow chained = .() {
 					chain = .() {
-						sType = .SurfaceDescriptorFromXlibWindow
+						sType = .SurfaceSourceXlibWindow
 					},
 					display = display,
 					window = (uint32)win
 				};
-				Wgpu.SurfaceDescriptor desc = .() {
-					nextInChain = (Wgpu.ChainedStruct*) &chained
+				Wgpu.WGPUSurfaceDescriptor desc = .() {
+					nextInChain = (Wgpu.WGPUChainedStruct*) &chained
 				};
 				return instance.CreateSurface(&desc);
 			}

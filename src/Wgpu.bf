@@ -3,10 +3,12 @@ using System.Interop;
 
 namespace Wgpu {
 	public static class Wgpu {
-		typedef uint32 WGPUBool;
-		typedef uint64 WGPUSubmissionIndex;
+		typealias WGPUBool = uint32;
+		typealias WGPUSubmissionIndex = uint64;
 
-		#define WGPU_STRLEN SIZE_MAX
+		public const uint32 WGPUBool_False = 0;
+		public const uint32 WGPUBool_True = 1;
+		public const c_ulong WGPU_STRLEN = ~0;
 
 		public enum WGPUAdapterType : c_uint {
 			DiscreteGPU = 0x00000001,
@@ -1074,8 +1076,8 @@ namespace Wgpu {
 		*/
 		[CRepr]
 		public struct WGPUStringView {
-			public char* data;
-			public size_t length;
+			public c_char* data;
+			public c_size length;
 
 			public this() {
 				this = default;
@@ -1303,6 +1305,12 @@ namespace Wgpu {
 			public this() {
 				this = default;
 			}
+
+			public this(WGPUBlendOperation operation, WGPUBlendFactor srcFactor, WGPUBlendFactor dstFactor) {
+				this.operation = operation;
+				this.srcFactor = srcFactor;
+				this.dstFactor = dstFactor;
+			}
 		}
 
 		[CRepr]
@@ -1342,6 +1350,13 @@ namespace Wgpu {
 
 			public this() {
 				this = default;
+			}
+
+			public this(double r, double g, double b, double a) {
+				this.r = r;
+				this.g = g;
+				this.b = b;
+				this.a = a;
 			}
 		}
 
@@ -1440,6 +1455,12 @@ namespace Wgpu {
 			public this() {
 				this = default;
 			}
+
+			public this(uint32 width, uint32 height, uint32 depthOrArrayLayers) {
+				this.width = width;
+				this.height = height;
+				this.depthOrArrayLayers = depthOrArrayLayers;
+			}
 		}
 
 		/**
@@ -1471,7 +1492,7 @@ namespace Wgpu {
 			/**
 			* The maximum number @ref WGPUFutureWaitInfo supported in a call to ::wgpuInstanceWaitAny with `timeoutNS > 0`.
 			*/
-			public size_t timedWaitAnyMaxCount;
+			public c_size timedWaitAnyMaxCount;
 
 			public this() {
 				this = default;
@@ -1540,6 +1561,12 @@ namespace Wgpu {
 			public this() {
 				this = default;
 			}
+
+			public this(uint32 x, uint32 y, uint32 z) {
+				this.x = x;
+				this.y = y;
+				this.z = z;
+			}
 		}
 
 		[CRepr]
@@ -1549,7 +1576,7 @@ namespace Wgpu {
 			* This is a \ref NonNullInputString.
 			*/
 			public WGPUStringView label;
-			public size_t bindGroupLayoutCount;
+			public c_size bindGroupLayoutCount;
 			public WGPUBindGroupLayout* bindGroupLayouts;
 
 			public this() {
@@ -1619,7 +1646,7 @@ namespace Wgpu {
 			* This is a \ref NonNullInputString.
 			*/
 			public WGPUStringView label;
-			public size_t colorFormatCount;
+			public c_size colorFormatCount;
 			public WGPUTextureFormat* colorFormats;
 			public WGPUTextureFormat depthStencilFormat;
 			public uint32 sampleCount;
@@ -1796,7 +1823,7 @@ namespace Wgpu {
 
 		[CRepr]
 		public struct WGPUSupportedFeatures {
-			public size_t featureCount;
+			public c_size featureCount;
 			public WGPUFeatureName* features;
 
 			public this() {
@@ -1806,7 +1833,7 @@ namespace Wgpu {
 
 		[CRepr]
 		public struct WGPUSupportedWGSLLanguageFeatures {
-			public size_t featureCount;
+			public c_size featureCount;
 			public WGPUWGSLLanguageFeatureName* features;
 
 			public this() {
@@ -1828,19 +1855,19 @@ namespace Wgpu {
 			/**
 			* A list of supported @ref WGPUTextureFormat values, in order of preference.
 			*/
-			public size_t formatCount;
+			public c_size formatCount;
 			public WGPUTextureFormat* formats;
 			/**
 			* A list of supported @ref WGPUPresentMode values.
 			* Guaranteed to contain @ref WGPUPresentMode_Fifo.
 			*/
-			public size_t presentModeCount;
+			public c_size presentModeCount;
 			public WGPUPresentMode* presentModes;
 			/**
 			* A list of supported @ref WGPUCompositeAlphaMode values.
 			* @ref WGPUCompositeAlphaMode_Auto will be an alias for the first element and will never be present in this array.
 			*/
-			public size_t alphaModeCount;
+			public c_size alphaModeCount;
 			public WGPUCompositeAlphaMode* alphaModes;
 
 			public this() {
@@ -1878,7 +1905,7 @@ namespace Wgpu {
 			/**
 			* The additional @ref WGPUTextureFormat for @ref WGPUTextureView format reinterpretation of the surface's textures.
 			*/
-			public size_t viewFormatCount;
+			public c_size viewFormatCount;
 			public WGPUTextureFormat* viewFormats;
 			/**
 			* How the surface's frames will be composited on the screen.
@@ -2112,7 +2139,7 @@ namespace Wgpu {
 			*/
 			public WGPUStringView label;
 			public WGPUBindGroupLayout layout;
-			public size_t entryCount;
+			public c_size entryCount;
 			public WGPUBindGroupEntry* entries;
 
 			public this() {
@@ -2148,7 +2175,7 @@ namespace Wgpu {
 		[CRepr]
 		public struct WGPUCompilationInfo {
 			public WGPUChainedStruct* nextInChain;
-			public size_t messageCount;
+			public c_size messageCount;
 			public WGPUCompilationMessage* messages;
 
 			public this() {
@@ -2180,7 +2207,7 @@ namespace Wgpu {
 			public WGPUStencilFaceState stencilBack;
 			public uint32 stencilReadMask;
 			public uint32 stencilWriteMask;
-			public int32_t depthBias;
+			public int32 depthBias;
 			public float depthBiasSlopeScale;
 			public float depthBiasClamp;
 
@@ -2196,7 +2223,7 @@ namespace Wgpu {
 			* This is a \ref NonNullInputString.
 			*/
 			public WGPUStringView label;
-			public size_t requiredFeatureCount;
+			public c_size requiredFeatureCount;
 			public WGPUFeatureName* requiredFeatures;
 			public WGPULimits* requiredLimits;
 			public WGPUQueueDescriptor defaultQueue;
@@ -2248,7 +2275,7 @@ namespace Wgpu {
 			* This is a \ref NullableInputString.
 			*/
 			public WGPUStringView entryPoint;
-			public size_t constantCount;
+			public c_size constantCount;
 			public WGPUConstantEntry* constants;
 
 			public this() {
@@ -2306,7 +2333,7 @@ namespace Wgpu {
 			public WGPUTextureFormat format;
 			public uint32 mipLevelCount;
 			public uint32 sampleCount;
-			public size_t viewFormatCount;
+			public c_size viewFormatCount;
 			public WGPUTextureFormat* viewFormats;
 
 			public this() {
@@ -2323,7 +2350,7 @@ namespace Wgpu {
 			*/
 			public WGPUVertexStepMode stepMode;
 			public uint64 arrayStride;
-			public size_t attributeCount;
+			public c_size attributeCount;
 			public WGPUVertexAttribute* attributes;
 
 			public this() {
@@ -2338,7 +2365,7 @@ namespace Wgpu {
 			* This is a \ref NonNullInputString.
 			*/
 			public WGPUStringView label;
-			public size_t entryCount;
+			public c_size entryCount;
 			public WGPUBindGroupLayoutEntry* entries;
 
 			public this() {
@@ -2385,7 +2412,7 @@ namespace Wgpu {
 			* This is a \ref NonNullInputString.
 			*/
 			public WGPUStringView label;
-			public size_t colorAttachmentCount;
+			public c_size colorAttachmentCount;
 			public WGPURenderPassColorAttachment* colorAttachments;
 			public WGPURenderPassDepthStencilAttachment* depthStencilAttachment;
 			public WGPUQuerySet occlusionQuerySet;
@@ -2404,9 +2431,9 @@ namespace Wgpu {
 			* This is a \ref NullableInputString.
 			*/
 			public WGPUStringView entryPoint;
-			public size_t constantCount;
+			public c_size constantCount;
 			public WGPUConstantEntry* constants;
-			public size_t bufferCount;
+			public c_size bufferCount;
 			public WGPUVertexBufferLayout* buffers;
 
 			public this() {
@@ -2422,9 +2449,9 @@ namespace Wgpu {
 			* This is a \ref NullableInputString.
 			*/
 			public WGPUStringView entryPoint;
-			public size_t constantCount;
+			public c_size constantCount;
 			public WGPUConstantEntry* constants;
-			public size_t targetCount;
+			public c_size targetCount;
 			public WGPUColorTargetState* targets;
 
 			public this() {
@@ -2502,7 +2529,7 @@ namespace Wgpu {
 		[CRepr]
 		public struct WGPUPipelineLayoutExtras {
 			public WGPUChainedStruct chain;
-			public size_t pushConstantRangeCount;
+			public c_size pushConstantRangeCount;
 			public WGPUPushConstantRange* pushConstantRanges;
 
 			public this() {
@@ -2546,10 +2573,10 @@ namespace Wgpu {
 
 		[CRepr]
 		public struct WGPURegistryReport {
-			public size_t numAllocated;
-			public size_t numKeptFromUser;
-			public size_t numReleasedFromUser;
-			public size_t elementSize;
+			public c_size numAllocated;
+			public c_size numKeptFromUser;
+			public c_size numReleasedFromUser;
+			public c_size elementSize;
 
 			public this() {
 				this = default;
@@ -2605,11 +2632,11 @@ namespace Wgpu {
 		public struct WGPUBindGroupEntryExtras {
 			public WGPUChainedStruct chain;
 			public WGPUBuffer* buffers;
-			public size_t bufferCount;
+			public c_size bufferCount;
 			public WGPUSampler* samplers;
-			public size_t samplerCount;
+			public c_size samplerCount;
 			public WGPUTextureView* textureViews;
-			public size_t textureViewCount;
+			public c_size textureViewCount;
 
 			public this() {
 				this = default;
@@ -2630,7 +2657,7 @@ namespace Wgpu {
 		public struct WGPUQuerySetDescriptorExtras {
 			public WGPUChainedStruct chain;
 			public WGPUPipelineStatisticName* pipelineStatistics;
-			public size_t pipelineStatisticCount;
+			public c_size pipelineStatisticCount;
 
 			public this() {
 				this = default;
@@ -2662,7 +2689,7 @@ namespace Wgpu {
 		* @param compilationInfo
 		* This parameter is @ref PassedWithoutOwnership.
 		*/
-		public function void WGPUCompilationInfoCallback(WGPUCompilationInfoRequestStatus status, struct WGPUCompilationInfo* compilationInfo, void* userdata1, void* userdata2);
+		public function void WGPUCompilationInfoCallback(WGPUCompilationInfoRequestStatus status, WGPUCompilationInfo* compilationInfo, void* userdata1, void* userdata2);
 		/**
 		* @param pipeline
 		* This parameter is @ref PassedWithOwnership.
@@ -2826,7 +2853,7 @@ namespace Wgpu {
 		* Proc pointer type for @ref wgpuBufferGetConstMappedRange:
 		* > @copydoc wgpuBufferGetConstMappedRange
 		*/
-		public function void* WGPUProcBufferGetConstMappedRange(WGPUBuffer buffer, size_t offset, size_t size);
+		public function void* WGPUProcBufferGetConstMappedRange(WGPUBuffer buffer, c_size offset, c_size size);
 		/**
 		* Proc pointer type for @ref wgpuBufferGetMapState:
 		* > @copydoc wgpuBufferGetMapState
@@ -2836,7 +2863,7 @@ namespace Wgpu {
 		* Proc pointer type for @ref wgpuBufferGetMappedRange:
 		* > @copydoc wgpuBufferGetMappedRange
 		*/
-		public function void* WGPUProcBufferGetMappedRange(WGPUBuffer buffer, size_t offset, size_t size);
+		public function void* WGPUProcBufferGetMappedRange(WGPUBuffer buffer, c_size offset, c_size size);
 		/**
 		* Proc pointer type for @ref wgpuBufferGetSize:
 		* > @copydoc wgpuBufferGetSize
@@ -2851,7 +2878,7 @@ namespace Wgpu {
 		* Proc pointer type for @ref wgpuBufferMapAsync:
 		* > @copydoc wgpuBufferMapAsync
 		*/
-		public function WGPUFuture WGPUProcBufferMapAsync(WGPUBuffer buffer, WGPUMapMode mode, size_t offset, size_t size, WGPUBufferMapCallbackInfo callbackInfo);
+		public function WGPUFuture WGPUProcBufferMapAsync(WGPUBuffer buffer, WGPUMapMode mode, c_size offset, c_size size, WGPUBufferMapCallbackInfo callbackInfo);
 		/**
 		* Proc pointer type for @ref wgpuBufferSetLabel:
 		* > @copydoc wgpuBufferSetLabel
@@ -3007,7 +3034,7 @@ namespace Wgpu {
 		* Proc pointer type for @ref wgpuComputePassEncoderSetBindGroup:
 		* > @copydoc wgpuComputePassEncoderSetBindGroup
 		*/
-		public function void WGPUProcComputePassEncoderSetBindGroup(WGPUComputePassEncoder computePassEncoder, uint32 groupIndex, WGPUBindGroup group, size_t dynamicOffsetCount, uint32* dynamicOffsets);
+		public function void WGPUProcComputePassEncoderSetBindGroup(WGPUComputePassEncoder computePassEncoder, uint32 groupIndex, WGPUBindGroup group, c_size dynamicOffsetCount, uint32* dynamicOffsets);
 		/**
 		* Proc pointer type for @ref wgpuComputePassEncoderSetLabel:
 		* > @copydoc wgpuComputePassEncoderSetLabel
@@ -3213,7 +3240,7 @@ namespace Wgpu {
 		* Proc pointer type for @ref wgpuInstanceWaitAny:
 		* > @copydoc wgpuInstanceWaitAny
 		*/
-		public function WGPUWaitStatus WGPUProcInstanceWaitAny(WGPUInstance instance, size_t futureCount, WGPUFutureWaitInfo* futures, uint64 timeoutNS);
+		public function WGPUWaitStatus WGPUProcInstanceWaitAny(WGPUInstance instance, c_size futureCount, WGPUFutureWaitInfo* futures, uint64 timeoutNS);
 		/**
 		* Proc pointer type for @ref wgpuInstanceAddRef.
 		* > @copydoc wgpuInstanceAddRef
@@ -3289,17 +3316,17 @@ namespace Wgpu {
 		* Proc pointer type for @ref wgpuQueueSubmit:
 		* > @copydoc wgpuQueueSubmit
 		*/
-		public function void WGPUProcQueueSubmit(WGPUQueue queue, size_t commandCount, WGPUCommandBuffer* commands);
+		public function void WGPUProcQueueSubmit(WGPUQueue queue, c_size commandCount, WGPUCommandBuffer* commands);
 		/**
 		* Proc pointer type for @ref wgpuQueueWriteBuffer:
 		* > @copydoc wgpuQueueWriteBuffer
 		*/
-		public function void WGPUProcQueueWriteBuffer(WGPUQueue queue, WGPUBuffer buffer, uint64 bufferOffset, void* data, size_t size);
+		public function void WGPUProcQueueWriteBuffer(WGPUQueue queue, WGPUBuffer buffer, uint64 bufferOffset, void* data, c_size size);
 		/**
 		* Proc pointer type for @ref wgpuQueueWriteTexture:
 		* > @copydoc wgpuQueueWriteTexture
 		*/
-		public function void WGPUProcQueueWriteTexture(WGPUQueue queue, WGPUTexelCopyTextureInfo* destination, void* data, size_t dataSize, WGPUTexelCopyBufferLayout* dataLayout, WGPUExtent3D* writeSize);
+		public function void WGPUProcQueueWriteTexture(WGPUQueue queue, WGPUTexelCopyTextureInfo* destination, void* data, c_size dataSize, WGPUTexelCopyBufferLayout* dataLayout, WGPUExtent3D* writeSize);
 		/**
 		* Proc pointer type for @ref wgpuQueueAddRef.
 		* > @copydoc wgpuQueueAddRef
@@ -3338,7 +3365,7 @@ namespace Wgpu {
 		* Proc pointer type for @ref wgpuRenderBundleEncoderDrawIndexed:
 		* > @copydoc wgpuRenderBundleEncoderDrawIndexed
 		*/
-		public function void WGPUProcRenderBundleEncoderDrawIndexed(WGPURenderBundleEncoder renderBundleEncoder, uint32 indexCount, uint32 instanceCount, uint32 firstIndex, int32_t baseVertex, uint32 firstInstance);
+		public function void WGPUProcRenderBundleEncoderDrawIndexed(WGPURenderBundleEncoder renderBundleEncoder, uint32 indexCount, uint32 instanceCount, uint32 firstIndex, int32 baseVertex, uint32 firstInstance);
 		/**
 		* Proc pointer type for @ref wgpuRenderBundleEncoderDrawIndexedIndirect:
 		* > @copydoc wgpuRenderBundleEncoderDrawIndexedIndirect
@@ -3373,7 +3400,7 @@ namespace Wgpu {
 		* Proc pointer type for @ref wgpuRenderBundleEncoderSetBindGroup:
 		* > @copydoc wgpuRenderBundleEncoderSetBindGroup
 		*/
-		public function void WGPUProcRenderBundleEncoderSetBindGroup(WGPURenderBundleEncoder renderBundleEncoder, uint32 groupIndex, WGPUBindGroup group, size_t dynamicOffsetCount, uint32* dynamicOffsets);
+		public function void WGPUProcRenderBundleEncoderSetBindGroup(WGPURenderBundleEncoder renderBundleEncoder, uint32 groupIndex, WGPUBindGroup group, c_size dynamicOffsetCount, uint32* dynamicOffsets);
 		/**
 		* Proc pointer type for @ref wgpuRenderBundleEncoderSetIndexBuffer:
 		* > @copydoc wgpuRenderBundleEncoderSetIndexBuffer
@@ -3420,7 +3447,7 @@ namespace Wgpu {
 		* Proc pointer type for @ref wgpuRenderPassEncoderDrawIndexed:
 		* > @copydoc wgpuRenderPassEncoderDrawIndexed
 		*/
-		public function void WGPUProcRenderPassEncoderDrawIndexed(WGPURenderPassEncoder renderPassEncoder, uint32 indexCount, uint32 instanceCount, uint32 firstIndex, int32_t baseVertex, uint32 firstInstance);
+		public function void WGPUProcRenderPassEncoderDrawIndexed(WGPURenderPassEncoder renderPassEncoder, uint32 indexCount, uint32 instanceCount, uint32 firstIndex, int32 baseVertex, uint32 firstInstance);
 		/**
 		* Proc pointer type for @ref wgpuRenderPassEncoderDrawIndexedIndirect:
 		* > @copydoc wgpuRenderPassEncoderDrawIndexedIndirect
@@ -3445,7 +3472,7 @@ namespace Wgpu {
 		* Proc pointer type for @ref wgpuRenderPassEncoderExecuteBundles:
 		* > @copydoc wgpuRenderPassEncoderExecuteBundles
 		*/
-		public function void WGPUProcRenderPassEncoderExecuteBundles(WGPURenderPassEncoder renderPassEncoder, size_t bundleCount, WGPURenderBundle* bundles);
+		public function void WGPUProcRenderPassEncoderExecuteBundles(WGPURenderPassEncoder renderPassEncoder, c_size bundleCount, WGPURenderBundle* bundles);
 		/**
 		* Proc pointer type for @ref wgpuRenderPassEncoderInsertDebugMarker:
 		* > @copydoc wgpuRenderPassEncoderInsertDebugMarker
@@ -3465,7 +3492,7 @@ namespace Wgpu {
 		* Proc pointer type for @ref wgpuRenderPassEncoderSetBindGroup:
 		* > @copydoc wgpuRenderPassEncoderSetBindGroup
 		*/
-		public function void WGPUProcRenderPassEncoderSetBindGroup(WGPURenderPassEncoder renderPassEncoder, uint32 groupIndex, WGPUBindGroup group, size_t dynamicOffsetCount, uint32* dynamicOffsets);
+		public function void WGPUProcRenderPassEncoderSetBindGroup(WGPURenderPassEncoder renderPassEncoder, uint32 groupIndex, WGPUBindGroup group, c_size dynamicOffsetCount, uint32* dynamicOffsets);
 		/**
 		* Proc pointer type for @ref wgpuRenderPassEncoderSetBlendConstant:
 		* > @copydoc wgpuRenderPassEncoderSetBlendConstant
@@ -3726,28 +3753,6 @@ namespace Wgpu {
 		public function void WGPUProcTextureViewRelease(WGPUTextureView textureView);
 
 		public function void WGPULogCallback(WGPULogLevel level, WGPUStringView message, void* userdata);
-		void wgpuGenerateReport(WGPUInstance instance, WGPUGlobalReport* report);
-		size_t wgpuInstanceEnumerateAdapters(WGPUInstance instance, WGPUInstanceEnumerateAdapterOptions* options, WGPUAdapter* adapters);
-		WGPUSubmissionIndex wgpuQueueSubmitForIndex(WGPUQueue queue, size_t commandCount, WGPUCommandBuffer* commands);
-		// Returns true if the queue is empty, or false if there are more queue submissions still in flight.
-		WGPUBool wgpuDevicePoll(WGPUDevice device, WGPUBool wait, WGPUSubmissionIndex* wrappedSubmissionIndex);
-		WGPUShaderModule wgpuDeviceCreateShaderModuleSpirV(WGPUDevice device, WGPUShaderModuleDescriptorSpirV* descriptor);
-		void wgpuSetLogCallback(WGPULogCallback callback, void* userdata);
-		void wgpuSetLogLevel(WGPULogLevel level);
-		uint32 wgpuGetVersion(void);
-		void wgpuRenderPassEncoderSetPushConstants(WGPURenderPassEncoder encoder, WGPUShaderStage stages, uint32 offset, uint32 sizeBytes, void* data);
-		void wgpuComputePassEncoderSetPushConstants(WGPUComputePassEncoder encoder, uint32 offset, uint32 sizeBytes, void* data);
-		void wgpuRenderBundleEncoderSetPushConstants(WGPURenderBundleEncoder encoder, WGPUShaderStage stages, uint32 offset, uint32 sizeBytes, void* data);
-		void wgpuRenderPassEncoderMultiDrawIndirect(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64 offset, uint32 count);
-		void wgpuRenderPassEncoderMultiDrawIndexedIndirect(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64 offset, uint32 count);
-		void wgpuRenderPassEncoderMultiDrawIndirectCount(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64 offset, WGPUBuffer count_buffer, uint64 count_buffer_offset, uint32 max_count);
-		void wgpuRenderPassEncoderMultiDrawIndexedIndirectCount(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64 offset, WGPUBuffer count_buffer, uint64 count_buffer_offset, uint32 max_count);
-		void wgpuComputePassEncoderBeginPipelineStatisticsQuery(WGPUComputePassEncoder computePassEncoder, WGPUQuerySet querySet, uint32 queryIndex);
-		void wgpuComputePassEncoderEndPipelineStatisticsQuery(WGPUComputePassEncoder computePassEncoder);
-		void wgpuRenderPassEncoderBeginPipelineStatisticsQuery(WGPURenderPassEncoder renderPassEncoder, WGPUQuerySet querySet, uint32 queryIndex);
-		void wgpuRenderPassEncoderEndPipelineStatisticsQuery(WGPURenderPassEncoder renderPassEncoder);
-		void wgpuComputePassEncoderWriteTimestamp(WGPUComputePassEncoder computePassEncoder, WGPUQuerySet querySet, uint32 queryIndex);
-		void wgpuRenderPassEncoderWriteTimestamp(WGPURenderPassEncoder renderPassEncoder, WGPUQuerySet querySet, uint32 queryIndex);
 
 
 		/**
@@ -3862,7 +3867,7 @@ namespace Wgpu {
 		*   **except** for overlaps with other *const* ranges, which are allowed in C.
 		*   (JS does not allow this because const ranges do not exist.)
 		*/
-		public static extern void* wgpuBufferGetConstMappedRange(WGPUBuffer buffer, size_t offset, size_t size);
+		public static extern void* wgpuBufferGetConstMappedRange(WGPUBuffer buffer, c_size offset, c_size size);
 		public static extern WGPUBufferMapState wgpuBufferGetMapState(WGPUBuffer buffer);
 		/**
 		* @param offset
@@ -3878,10 +3883,10 @@ namespace Wgpu {
 		* - There is any content-timeline error as defined in the WebGPU specification for `getMappedRange()` (alignments, overlaps, etc.)
 		* - The buffer is not mapped with @ref WGPUMapMode_Write.
 		*/
-		public static extern void* wgpuBufferGetMappedRange(WGPUBuffer buffer, size_t offset, size_t size);
+		public static extern void* wgpuBufferGetMappedRange(WGPUBuffer buffer, c_size offset, c_size size);
 		public static extern uint64 wgpuBufferGetSize(WGPUBuffer buffer);
 		public static extern WGPUBufferUsage wgpuBufferGetUsage(WGPUBuffer buffer);
-		public static extern WGPUFuture wgpuBufferMapAsync(WGPUBuffer buffer, WGPUMapMode mode, size_t offset, size_t size, WGPUBufferMapCallbackInfo callbackInfo);
+		public static extern WGPUFuture wgpuBufferMapAsync(WGPUBuffer buffer, WGPUMapMode mode, c_size offset, c_size size, WGPUBufferMapCallbackInfo callbackInfo);
 		public static extern void wgpuBufferSetLabel(WGPUBuffer buffer, WGPUStringView label);
 		public static extern void wgpuBufferUnmap(WGPUBuffer buffer);
 		public static extern void wgpuBufferAddRef(WGPUBuffer buffer);
@@ -3932,7 +3937,7 @@ namespace Wgpu {
 		public static extern void wgpuComputePassEncoderInsertDebugMarker(WGPUComputePassEncoder computePassEncoder, WGPUStringView markerLabel);
 		public static extern void wgpuComputePassEncoderPopDebugGroup(WGPUComputePassEncoder computePassEncoder);
 		public static extern void wgpuComputePassEncoderPushDebugGroup(WGPUComputePassEncoder computePassEncoder, WGPUStringView groupLabel);
-		public static extern void wgpuComputePassEncoderSetBindGroup(WGPUComputePassEncoder computePassEncoder, uint32 groupIndex, WGPUBindGroup group, size_t dynamicOffsetCount, uint32* dynamicOffsets);
+		public static extern void wgpuComputePassEncoderSetBindGroup(WGPUComputePassEncoder computePassEncoder, uint32 groupIndex, WGPUBindGroup group, c_size dynamicOffsetCount, uint32* dynamicOffsets);
 		public static extern void wgpuComputePassEncoderSetLabel(WGPUComputePassEncoder computePassEncoder, WGPUStringView label);
 		public static extern void wgpuComputePassEncoderSetPipeline(WGPUComputePassEncoder computePassEncoder, WGPUComputePipeline pipeline);
 		public static extern void wgpuComputePassEncoderAddRef(WGPUComputePassEncoder computePassEncoder);
@@ -4029,7 +4034,7 @@ namespace Wgpu {
 		*
 		* See @ref Wait-Any for more information.
 		*/
-		public static extern WGPUWaitStatus wgpuInstanceWaitAny(WGPUInstance instance, size_t futureCount, WGPUFutureWaitInfo* futures, uint64 timeoutNS);
+		public static extern WGPUWaitStatus wgpuInstanceWaitAny(WGPUInstance instance, c_size futureCount, WGPUFutureWaitInfo* futures, uint64 timeoutNS);
 		public static extern void wgpuInstanceAddRef(WGPUInstance instance);
 		public static extern void wgpuInstanceRelease(WGPUInstance instance);
 
@@ -4064,13 +4069,13 @@ namespace Wgpu {
 		*/
 		public static extern WGPUFuture wgpuQueueOnSubmittedWorkDone(WGPUQueue queue, WGPUQueueWorkDoneCallbackInfo callbackInfo);
 		public static extern void wgpuQueueSetLabel(WGPUQueue queue, WGPUStringView label);
-		public static extern void wgpuQueueSubmit(WGPUQueue queue, size_t commandCount, WGPUCommandBuffer* commands);
+		public static extern void wgpuQueueSubmit(WGPUQueue queue, c_size commandCount, WGPUCommandBuffer* commands);
 		/**
 		* Produces a @ref DeviceError both content-timeline (`size` alignment) and device-timeline
 		* errors defined by the WebGPU specification.
 		*/
-		public static extern void wgpuQueueWriteBuffer(WGPUQueue queue, WGPUBuffer buffer, uint64 bufferOffset, void* data, size_t size);
-		public static extern void wgpuQueueWriteTexture(WGPUQueue queue, WGPUTexelCopyTextureInfo* destination, void* data, size_t dataSize, WGPUTexelCopyBufferLayout* dataLayout, WGPUExtent3D* writeSize);
+		public static extern void wgpuQueueWriteBuffer(WGPUQueue queue, WGPUBuffer buffer, uint64 bufferOffset, void* data, c_size size);
+		public static extern void wgpuQueueWriteTexture(WGPUQueue queue, WGPUTexelCopyTextureInfo* destination, void* data, c_size dataSize, WGPUTexelCopyBufferLayout* dataLayout, WGPUExtent3D* writeSize);
 		public static extern void wgpuQueueAddRef(WGPUQueue queue);
 		public static extern void wgpuQueueRelease(WGPUQueue queue);
 
@@ -4091,14 +4096,14 @@ namespace Wgpu {
 		* \brief Functions whose first argument has type WGPURenderBundleEncoder.
 		*/
 		public static extern void wgpuRenderBundleEncoderDraw(WGPURenderBundleEncoder renderBundleEncoder, uint32 vertexCount, uint32 instanceCount, uint32 firstVertex, uint32 firstInstance);
-		public static extern void wgpuRenderBundleEncoderDrawIndexed(WGPURenderBundleEncoder renderBundleEncoder, uint32 indexCount, uint32 instanceCount, uint32 firstIndex, int32_t baseVertex, uint32 firstInstance);
+		public static extern void wgpuRenderBundleEncoderDrawIndexed(WGPURenderBundleEncoder renderBundleEncoder, uint32 indexCount, uint32 instanceCount, uint32 firstIndex, int32 baseVertex, uint32 firstInstance);
 		public static extern void wgpuRenderBundleEncoderDrawIndexedIndirect(WGPURenderBundleEncoder renderBundleEncoder, WGPUBuffer indirectBuffer, uint64 indirectOffset);
 		public static extern void wgpuRenderBundleEncoderDrawIndirect(WGPURenderBundleEncoder renderBundleEncoder, WGPUBuffer indirectBuffer, uint64 indirectOffset);
 		public static extern WGPURenderBundle wgpuRenderBundleEncoderFinish(WGPURenderBundleEncoder renderBundleEncoder, WGPURenderBundleDescriptor* descriptor);
 		public static extern void wgpuRenderBundleEncoderInsertDebugMarker(WGPURenderBundleEncoder renderBundleEncoder, WGPUStringView markerLabel);
 		public static extern void wgpuRenderBundleEncoderPopDebugGroup(WGPURenderBundleEncoder renderBundleEncoder);
 		public static extern void wgpuRenderBundleEncoderPushDebugGroup(WGPURenderBundleEncoder renderBundleEncoder, WGPUStringView groupLabel);
-		public static extern void wgpuRenderBundleEncoderSetBindGroup(WGPURenderBundleEncoder renderBundleEncoder, uint32 groupIndex, WGPUBindGroup group, size_t dynamicOffsetCount, uint32* dynamicOffsets);
+		public static extern void wgpuRenderBundleEncoderSetBindGroup(WGPURenderBundleEncoder renderBundleEncoder, uint32 groupIndex, WGPUBindGroup group, c_size dynamicOffsetCount, uint32* dynamicOffsets);
 		public static extern void wgpuRenderBundleEncoderSetIndexBuffer(WGPURenderBundleEncoder renderBundleEncoder, WGPUBuffer buffer, WGPUIndexFormat format, uint64 offset, uint64 size);
 		public static extern void wgpuRenderBundleEncoderSetLabel(WGPURenderBundleEncoder renderBundleEncoder, WGPUStringView label);
 		public static extern void wgpuRenderBundleEncoderSetPipeline(WGPURenderBundleEncoder renderBundleEncoder, WGPURenderPipeline pipeline);
@@ -4114,16 +4119,16 @@ namespace Wgpu {
 		*/
 		public static extern void wgpuRenderPassEncoderBeginOcclusionQuery(WGPURenderPassEncoder renderPassEncoder, uint32 queryIndex);
 		public static extern void wgpuRenderPassEncoderDraw(WGPURenderPassEncoder renderPassEncoder, uint32 vertexCount, uint32 instanceCount, uint32 firstVertex, uint32 firstInstance);
-		public static extern void wgpuRenderPassEncoderDrawIndexed(WGPURenderPassEncoder renderPassEncoder, uint32 indexCount, uint32 instanceCount, uint32 firstIndex, int32_t baseVertex, uint32 firstInstance);
+		public static extern void wgpuRenderPassEncoderDrawIndexed(WGPURenderPassEncoder renderPassEncoder, uint32 indexCount, uint32 instanceCount, uint32 firstIndex, int32 baseVertex, uint32 firstInstance);
 		public static extern void wgpuRenderPassEncoderDrawIndexedIndirect(WGPURenderPassEncoder renderPassEncoder, WGPUBuffer indirectBuffer, uint64 indirectOffset);
 		public static extern void wgpuRenderPassEncoderDrawIndirect(WGPURenderPassEncoder renderPassEncoder, WGPUBuffer indirectBuffer, uint64 indirectOffset);
 		public static extern void wgpuRenderPassEncoderEnd(WGPURenderPassEncoder renderPassEncoder);
 		public static extern void wgpuRenderPassEncoderEndOcclusionQuery(WGPURenderPassEncoder renderPassEncoder);
-		public static extern void wgpuRenderPassEncoderExecuteBundles(WGPURenderPassEncoder renderPassEncoder, size_t bundleCount, WGPURenderBundle* bundles);
+		public static extern void wgpuRenderPassEncoderExecuteBundles(WGPURenderPassEncoder renderPassEncoder, c_size bundleCount, WGPURenderBundle* bundles);
 		public static extern void wgpuRenderPassEncoderInsertDebugMarker(WGPURenderPassEncoder renderPassEncoder, WGPUStringView markerLabel);
 		public static extern void wgpuRenderPassEncoderPopDebugGroup(WGPURenderPassEncoder renderPassEncoder);
 		public static extern void wgpuRenderPassEncoderPushDebugGroup(WGPURenderPassEncoder renderPassEncoder, WGPUStringView groupLabel);
-		public static extern void wgpuRenderPassEncoderSetBindGroup(WGPURenderPassEncoder renderPassEncoder, uint32 groupIndex, WGPUBindGroup group, size_t dynamicOffsetCount, uint32* dynamicOffsets);
+		public static extern void wgpuRenderPassEncoderSetBindGroup(WGPURenderPassEncoder renderPassEncoder, uint32 groupIndex, WGPUBindGroup group, c_size dynamicOffsetCount, uint32* dynamicOffsets);
 		public static extern void wgpuRenderPassEncoderSetBlendConstant(WGPURenderPassEncoder renderPassEncoder, WGPUColor* color);
 		public static extern void wgpuRenderPassEncoderSetIndexBuffer(WGPURenderPassEncoder renderPassEncoder, WGPUBuffer buffer, WGPUIndexFormat format, uint64 offset, uint64 size);
 		public static extern void wgpuRenderPassEncoderSetLabel(WGPURenderPassEncoder renderPassEncoder, WGPUStringView label);
@@ -4294,5 +4299,31 @@ namespace Wgpu {
 		public static extern void wgpuTextureViewSetLabel(WGPUTextureView textureView, WGPUStringView label);
 		public static extern void wgpuTextureViewAddRef(WGPUTextureView textureView);
 		public static extern void wgpuTextureViewRelease(WGPUTextureView textureView);
+
+
+
+		public static extern void wgpuGenerateReport(WGPUInstance instance, WGPUGlobalReport* report);
+		public static extern c_size wgpuInstanceEnumerateAdapters(WGPUInstance instance, WGPUInstanceEnumerateAdapterOptions* options, WGPUAdapter* adapters);
+		public static extern WGPUSubmissionIndex wgpuQueueSubmitForIndex(WGPUQueue queue, c_size commandCount, WGPUCommandBuffer* commands);
+		// Returns true if the queue is empty, or false if there are more queue submissions still in flight.
+		public static extern WGPUBool wgpuDevicePoll(WGPUDevice device, WGPUBool wait, WGPUSubmissionIndex* wrappedSubmissionIndex);
+		public static extern WGPUShaderModule wgpuDeviceCreateShaderModuleSpirV(WGPUDevice device, WGPUShaderModuleDescriptorSpirV* descriptor);
+		public static extern void wgpuSetLogCallback(WGPULogCallback callback, void* userdata);
+		public static extern void wgpuSetLogLevel(WGPULogLevel level);
+		public static extern uint32 wgpuGetVersion(void);
+		public static extern void wgpuRenderPassEncoderSetPushConstants(WGPURenderPassEncoder encoder, WGPUShaderStage stages, uint32 offset, uint32 sizeBytes, void* data);
+		public static extern void wgpuComputePassEncoderSetPushConstants(WGPUComputePassEncoder encoder, uint32 offset, uint32 sizeBytes, void* data);
+		public static extern void wgpuRenderBundleEncoderSetPushConstants(WGPURenderBundleEncoder encoder, WGPUShaderStage stages, uint32 offset, uint32 sizeBytes, void* data);
+		public static extern void wgpuRenderPassEncoderMultiDrawIndirect(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64 offset, uint32 count);
+		public static extern void wgpuRenderPassEncoderMultiDrawIndexedIndirect(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64 offset, uint32 count);
+		public static extern void wgpuRenderPassEncoderMultiDrawIndirectCount(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64 offset, WGPUBuffer count_buffer, uint64 count_buffer_offset, uint32 max_count);
+		public static extern void wgpuRenderPassEncoderMultiDrawIndexedIndirectCount(WGPURenderPassEncoder encoder, WGPUBuffer buffer, uint64 offset, WGPUBuffer count_buffer, uint64 count_buffer_offset, uint32 max_count);
+		public static extern void wgpuComputePassEncoderBeginPipelineStatisticsQuery(WGPUComputePassEncoder computePassEncoder, WGPUQuerySet querySet, uint32 queryIndex);
+		public static extern void wgpuComputePassEncoderEndPipelineStatisticsQuery(WGPUComputePassEncoder computePassEncoder);
+		public static extern void wgpuRenderPassEncoderBeginPipelineStatisticsQuery(WGPURenderPassEncoder renderPassEncoder, WGPUQuerySet querySet, uint32 queryIndex);
+		public static extern void wgpuRenderPassEncoderEndPipelineStatisticsQuery(WGPURenderPassEncoder renderPassEncoder);
+		public static extern void wgpuComputePassEncoderWriteTimestamp(WGPUComputePassEncoder computePassEncoder, WGPUQuerySet querySet, uint32 queryIndex);
+		public static extern void wgpuRenderPassEncoderWriteTimestamp(WGPURenderPassEncoder renderPassEncoder, WGPUQuerySet querySet, uint32 queryIndex);
+
 	}
 }
