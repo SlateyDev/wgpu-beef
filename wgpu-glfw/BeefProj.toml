@@ -1,5 +1,5 @@
 FileVersion = 1
-Dependencies = {corlib = "*", GLFW = "*", Wgpu = "*"}
+Dependencies = {corlib = "*", Wgpu = "*", GLFW = "*"}
 
 [Project]
 Name = "Wgpu-Glfw"

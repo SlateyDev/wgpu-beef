@@ -18,14 +18,14 @@ namespace Wgpu {
 		}
 
 		public struct TextureFormatFeatures {
-			public TextureUsage allowedUsages;
+			public WGPUTextureUsage allowedUsages;
 			public TextureFormatFeature flags;
 			public bool filterable;
 		}
 
 		public struct TextureFormatInfo {
-			public FeatureName requiredFeatures;
-			public TextureSampleType sampleType;
+			public WGPUFeatureName requiredFeatures;
+			public WGPUTextureSampleType sampleType;
 			public uint8[2] blockDimensions;
 			public uint8 blockSize;
 			public uint8 components;
@@ -34,19 +34,19 @@ namespace Wgpu {
 		}
 
 		public struct BufferInitDescriptor {
-			public c_char* label;
+			public WGPUStringView label;
 			public Span<uint8> contents;
-			public BufferUsage usage;
+			public WGPUBufferUsage usage;
 		}
 
 		/// Creates a Buffer with data to initialize it.
-		public static Buffer DeviceCreateBufferInit(Device device, BufferInitDescriptor* descriptor) {
+		public static WGPUBuffer DeviceCreateBufferInit(WGPUDevice device, BufferInitDescriptor* descriptor) {
 			if (descriptor.contents.IsEmpty) {
-				BufferDescriptor desc = .() {
+				WGPUBufferDescriptor desc = .() {
 					label = descriptor.label,
 					size = 0,
 					usage = descriptor.usage,
-					mappedAtCreation = false
+					mappedAtCreation = WGPUBool_False
 				};
 
 				return device.CreateBuffer(&desc);
@@ -55,13 +55,13 @@ namespace Wgpu {
 			uint64 size = (.) descriptor.contents.Length;
 			uint64 alignedSize = AlignBufferSize!(size);
 
-			BufferDescriptor desc = .() {
+			WGPUBufferDescriptor desc = .() {
 				label = descriptor.label,
 				size = alignedSize,
 				usage = descriptor.usage,
-				mappedAtCreation = true
+				mappedAtCreation = WGPUBool_True
 			};
-			Buffer buffer = device.CreateBuffer(&desc);
+			WGPUBuffer buffer = device.CreateBuffer(&desc);
 
 			void* data = buffer.GetMappedRange(0, alignedSize);
 			Internal.MemCpy(data, descriptor.contents.Ptr, (.) size);
@@ -75,10 +75,10 @@ namespace Wgpu {
 		/// If the texture is a 2DArray texture, uploads each layer in order, expecting each layer and its mips to be tightly packed.
 		/// Example: Layer0Mip0 Layer0Mip1 Layer0Mip2 ... Layer1Mip0 Layer1Mip1 Layer1Mip2 ...
 		/// Implicitly adds the COPY_DST usage if it is not present in the descriptor, as it is required to be able to upload the data to the gpu.
-		public static Texture DeviceCreateTextureWithData(Device device, Queue queue, TextureDescriptor* descriptor, void* data) {
+		public static WGPUTexture DeviceCreateTextureWithData(WGPUDevice device, WGPUQueue queue, WGPUTextureDescriptor* descriptor, void* data) {
 			// Implicitly add the COPY_DST usage
 			descriptor.usage |= .CopyDst;
-			Texture texture = device.CreateTexture(descriptor);
+			WGPUTexture texture = device.CreateTexture(descriptor);
 
 			TextureFormatInfo formatInfo = Describe(descriptor.format);
 			uint32 layerIterations = descriptor.GetArrayLayerCount();
@@ -86,7 +86,7 @@ namespace Wgpu {
 			uint binaryOffset = 0;
 			for (uint32 layer < layerIterations) {
 				for (uint32 mip < descriptor.mipLevelCount) {
-					Extent3D mipSize = descriptor.GetMipLevelSize(mip);
+					WGPUExtent3D mipSize = descriptor.GetMipLevelSize(mip);
 
 					// copying layers separately
 					if (descriptor.dimension != ._3D) mipSize.depthOrArrayLayers = 1;
@@ -94,7 +94,7 @@ namespace Wgpu {
 					// When uploading mips of compressed textures and the mip is supposed to be
 					// a size that isn't a multiple of the block size, the mip needs to be uploaded
 					// as its "physical size" which is the size rounded up to the nearest block size.
-					Extent3D mipPhysical = mipSize.GetPhysicalSize(descriptor.format);
+					WGPUExtent3D mipPhysical = mipSize.GetPhysicalSize(descriptor.format);
 
 					// All these calculations are performed on the physical size as that's the
 					// data that exists in the buffer.
@@ -106,13 +106,13 @@ namespace Wgpu {
 
 					uint endOffset = binaryOffset + dataSize;
 
-					ImageCopyTexture destination = .() {
+					WGPUTexelCopyTextureInfo destination = .() {
 						texture = texture,
 						mipLevel = mip,
 						origin = .(0, 0, layer),
 						aspect = .All
 					};
-					TextureDataLayout dataLayout = .() {
+					WGPUTexelCopyBufferLayout dataLayout = .() {
 						offset = 0,
 						bytesPerRow = bytesPerRow,
 						rowsPerImage = heightBlocks
@@ -126,30 +126,30 @@ namespace Wgpu {
 			return texture;
 		}
 
-		extension Device {
+		extension WGPUDevice {
 			/// Creates a Buffer with data to initialize it.
-			public Buffer CreateBufferInit(BufferInitDescriptor* descriptor) => DeviceCreateBufferInit(this, descriptor);
+			public WGPUBuffer CreateBufferInit(BufferInitDescriptor* descriptor) => DeviceCreateBufferInit(this, descriptor);
 
 			/// Upload an entire texture and its mipmaps from a source buffer.
 			/// Expects all mipmaps to be tightly packed in the data buffer.
 			/// If the texture is a 2DArray texture, uploads each layer in order, expecting each layer and its mips to be tightly packed.
 			/// Example: Layer0Mip0 Layer0Mip1 Layer0Mip2 ... Layer1Mip0 Layer1Mip1 Layer1Mip2 ...
 			/// Implicitly adds the COPY_DST usage if it is not present in the descriptor, as it is required to be able to upload the data to the gpu.
-			public Texture CreateTextureWithData(Queue queue, TextureDescriptor* descriptor, void* data) => DeviceCreateTextureWithData(this, queue, descriptor, data);
+			public WGPUTexture CreateTextureWithData(WGPUQueue queue, WGPUTextureDescriptor* descriptor, void* data) => DeviceCreateTextureWithData(this, queue, descriptor, data);
 		}
 
-		extension TextureDescriptor {
+		extension WGPUTextureDescriptor {
 			/// Returns the number of array layers.
 			public uint32 GetArrayLayerCount() => dimension == ._3D ? 1 : size.depthOrArrayLayers;
 
 			/// Calculates the extent at a given mip level. If the given mip level is larger than possible, returns 0.
-			public Extent3D GetMipLevelSize(uint32 level) {
+			public WGPUExtent3D GetMipLevelSize(uint32 level) {
 				if (level >= mipLevelCount) return .();
 				return size.GetMipLevelSize(level, dimension == ._3D);
 			}
 		}
 
-		extension Extent3D {
+		extension WGPUExtent3D {
 			/// Calculates the extent at a given mip level. Does not account for memory size being a multiple of block size.
 			public Self GetMipLevelSize(uint32 level, bool is3dTexture) => .() {
 				width = Math.Max(1, width >> level),
@@ -159,7 +159,7 @@ namespace Wgpu {
 
 			/// Calculates the physical size is backing an texture of the given format and extent. This includes padding to the block width and height of the format.
 			/// This is the texture extent that you must upload at when uploading to mipmaps of compressed textures.
-			public Self GetPhysicalSize(TextureFormat format) {
+			public Self GetPhysicalSize(WGPUTextureFormat format) {
 				uint8[2] blockSize = Describe(format).blockDimensions;
 				uint32 blockWidth = blockSize[0];
 				uint32 blockHeight = blockSize[1];
@@ -171,36 +171,36 @@ namespace Wgpu {
 			}
 		}
 
-		extension Origin3D {
+		extension WGPUOrigin3D {
 			public static Self Zero => .();
 		}
 
-		public static TextureFormatInfo Describe(TextureFormat format) {
+		public static TextureFormatInfo Describe(WGPUTextureFormat format) {
 			// Features
-			FeatureName native = .Undefined;
-			FeatureName bc = .TextureCompressionBC;
-			FeatureName etc2 = .TextureCompressionETC2;
-			FeatureName astc_ldr = .TextureCompressionASTC; // LDR
+			WGPUFeatureName native = .Undefined;
+			WGPUFeatureName bc = .TextureCompressionBC;
+			WGPUFeatureName etc2 = .TextureCompressionETC2;
+			WGPUFeatureName astc_ldr = .TextureCompressionASTC; // LDR
 			//FeatureName norm16bit = .Undefined; // 16BIT_NORM
 
 			// Sample Types
-			TextureSampleType uint = .Uint;
-			TextureSampleType sint = .Sint;
-			TextureSampleType nearest = .UnfilterableFloat;
-			TextureSampleType float = .Float;
-			TextureSampleType depth = .Depth;
+			WGPUTextureSampleType uint = .Uint;
+			WGPUTextureSampleType sint = .Sint;
+			WGPUTextureSampleType nearest = .UnfilterableFloat;
+			WGPUTextureSampleType float = .Float;
+			WGPUTextureSampleType depth = .Depth;
 
 			// Color spaces
 			bool linear = false;
 			bool srgb = true;
 
 			// Flags
-			TextureUsage basic = .CopySrc | .CopyDst | .TextureBinding;
-			TextureUsage attachment = basic | .RenderAttachment;
-			TextureUsage storage = basic | .StorageBinding;
-			TextureUsage all_flags = .CopyDst | .CopySrc | .RenderAttachment | .StorageBinding | .TextureBinding;
+			WGPUTextureUsage basic = .CopySrc | .CopyDst | .TextureBinding;
+			WGPUTextureUsage attachment = basic | .RenderAttachment;
+			WGPUTextureUsage storage = basic | .StorageBinding;
+			WGPUTextureUsage all_flags = .CopyDst | .CopySrc | .RenderAttachment | .StorageBinding | .TextureBinding;
 
-			(FeatureName, TextureSampleType, bool, uint8[2], uint8, TextureUsage, uint8) final;
+			(WGPUFeatureName, WGPUTextureSampleType, bool, uint8[2], uint8, WGPUTextureUsage, uint8) final;
 			switch (format) {
 			// Normal 8 bit textures
 			case .R8Unorm: final = (native, float, linear, .(1, 1), 1, attachment, 1);
@@ -340,13 +340,15 @@ namespace Wgpu {
 			};
 		}
 
-		extension Limits {
+		extension WGPULimits {
 			public static Self Default() => .() {
 				maxTextureDimension1D = 8192,
 				maxTextureDimension2D = 8192,
 				maxTextureDimension3D = 2048,
 				maxTextureArrayLayers = 256,
 				maxBindGroups = 4,
+				maxBindGroupsPlusVertexBuffers = 24,
+				maxBindingsPerBindGroup = 1000,
 				maxDynamicUniformBuffersPerPipelineLayout = 8,
 				maxDynamicStorageBuffersPerPipelineLayout = 4,
 				maxSampledTexturesPerShaderStage = 16,
@@ -356,13 +358,16 @@ namespace Wgpu {
 				maxUniformBuffersPerShaderStage = 12,
 				maxUniformBufferBindingSize = 64 << 10,
 				maxStorageBufferBindingSize = 128 << 20,
-				maxVertexBuffers = 8,
-				maxVertexAttributes = 16,
-				maxVertexBufferArrayStride = 2048,
 				minUniformBufferOffsetAlignment = 256,
 				minStorageBufferOffsetAlignment = 256,
-				maxInterStageShaderComponents = 60,
-				maxComputeWorkgroupStorageSize = 16352,
+				maxVertexBuffers = 8,
+				maxBufferSize = 256 << 20,
+				maxVertexAttributes = 16,
+				maxVertexBufferArrayStride = 2048,
+				maxInterStageShaderVariables = 16,
+				maxColorAttachments = 8,
+				maxColorAttachmentBytesPerSample = 32,
+				maxComputeWorkgroupStorageSize = 16384,
 				maxComputeInvocationsPerWorkgroup = 256,
 				maxComputeWorkgroupSizeX = 256,
 				maxComputeWorkgroupSizeY = 256,

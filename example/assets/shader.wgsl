@@ -14,7 +14,7 @@ var t_t: texture_2d<f32>;
 @group(0) @binding(1)
 var s_t: sampler;
 
-@stage(vertex)
+@vertex
 fn vs_main(in: VertexInput) -> VertexOutput {
     var out: VertexOutput;
 
@@ -24,7 +24,7 @@ fn vs_main(in: VertexInput) -> VertexOutput {
     return out;
 }
 
-@stage(fragment)
+@fragment
 fn fs_main(in: VertexOutput) -> @location(0) vec4<f32> {
     return textureSample(t_t, s_t, in.texCoords);
 }
