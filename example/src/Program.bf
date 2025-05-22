@@ -17,17 +17,17 @@ namespace Example {
 			Glfw.Init();
 
 			Glfw.WindowHint(.ClientApi, Glfw.ClientApi.NoApi);
-			GlfwWindow* window = Glfw.CreateWindow(1280, 720, "WGPU", null, null);
+			var window = Glfw.CreateWindow(1280, 720, "WGPU", null, null);
 
 			// Wgpu log
 			Wgpu.wgpuSetLogLevel(.Info);
 			Wgpu.wgpuSetLogCallback((level, msg, userdata) => Console.WriteLine($"{level}: {scope String(msg.data, (int)msg.length)}"), null);
 
 			// Create instance
-			Wgpu.WGPUInstance instance = Wgpu.wgpuCreateInstance(null);
+			var instance = Wgpu.wgpuCreateInstance(null);
 
 			// Create surface
-			Wgpu.WGPUSurface surface = Wgpu.CreateSurfaceFromGlfw(instance, window);
+			var surface = Wgpu.CreateSurfaceFromGlfw(instance, window);
 
 			// Request adapter
 			Wgpu.WGPURequestAdapterOptions options = .() {
@@ -53,7 +53,7 @@ namespace Example {
 			//device.SetUncapturedErrorCallback((type, message, userdata) => Console.WriteLine("{}: {}", type, StringView(message)), null);
 
 			// Get queue
-			Wgpu.WGPUQueue queue = device.GetQueue();
+			var queue = device.GetQueue();
 
 			Console.WriteLine("Retrieved Queue");
 
@@ -84,7 +84,7 @@ namespace Example {
 				mipLevelCount = 1,
 				sampleCount = 1
 			};
-			Wgpu.WGPUTexture texture = device.CreateTextureWithData(queue, &textureDesc, data);
+			var texture = device.CreateTextureWithData(queue, &textureDesc, data);
 			stbi.stbi_image_free(data);
 
 			Wgpu.WGPUTextureViewDescriptor textureViewDesc = .() {
@@ -96,7 +96,7 @@ namespace Example {
 				arrayLayerCount = 1,
 				aspect = .All
 			};
-			Wgpu.WGPUTextureView textureView = texture.CreateView(&textureViewDesc);
+			var textureView = texture.CreateView(&textureViewDesc);
 
 			// Sampler
 			Wgpu.WGPUSamplerDescriptor samplerDesc = .() {
@@ -110,7 +110,7 @@ namespace Example {
 				lodMaxClamp = 32,
 				mipmapFilter = .Nearest
 			};
-			Wgpu.WGPUSampler sampler = device.CreateSampler(&samplerDesc);
+			var sampler = device.CreateSampler(&samplerDesc);
 
 			// Bind group layout
 			Wgpu.WGPUBindGroupLayoutEntry[?] bindGroupLayoutEntries = .(
@@ -134,7 +134,7 @@ namespace Example {
 				entryCount = bindGroupLayoutEntries.Count,
 				entries = &bindGroupLayoutEntries
 			};
-			Wgpu.WGPUBindGroupLayout bindGroupLayout = device.CreateBindGroupLayout(&bindGroupLayoutDesc);
+			var bindGroupLayout = device.CreateBindGroupLayout(&bindGroupLayoutDesc);
 
 			// Bind group
 			Wgpu.WGPUBindGroupEntry[?] bindGroupEntries = .(
@@ -152,7 +152,7 @@ namespace Example {
 				entryCount = bindGroupEntries.Count,
 				entries = &bindGroupEntries
 			};
-			Wgpu.WGPUBindGroup bindGroup = device.CreateBindGroup(&bindGroupDesc);
+			var bindGroup = device.CreateBindGroup(&bindGroupDesc);
 
 			// Pipeline
 			String shaderBuffer = scope .();
@@ -166,7 +166,7 @@ namespace Example {
 			Wgpu.WGPUShaderModuleDescriptor shaderDesc = .() {
 				nextInChain = (Wgpu.WGPUChainedStruct*) &shaderWgslDesc,
 			};
-			Wgpu.WGPUShaderModule shader = device.CreateShaderModule(&shaderDesc);
+			var shader = device.CreateShaderModule(&shaderDesc);
 
 			// Vertex buffer
 			Vertex[?] vertices = .(
@@ -180,7 +180,7 @@ namespace Example {
 				contents = .((uint8*) &vertices, vertices.Count * sizeof(Vertex)),
 				usage = .Vertex
 			};
-			Wgpu.WGPUBuffer vertexBuffer = device.CreateBufferInit(&vertexBufferDesc);
+			var vertexBuffer = device.CreateBufferInit(&vertexBufferDesc);
 
 			// Index buffer
 			uint16[?] indices = .(
@@ -192,14 +192,14 @@ namespace Example {
 				contents = .((uint8*) &indices, indices.Count * sizeof(uint16)),
 				usage = .Index
 			};
-			Wgpu.WGPUBuffer indexBuffer = device.CreateBufferInit(&indexBufferDesc);
+			var indexBuffer = device.CreateBufferInit(&indexBufferDesc);
 
 			// Pipeline layout
 			Wgpu.WGPUPipelineLayoutDescriptor layoutDesc = .() {
 				bindGroupLayoutCount = 1,
 				bindGroupLayouts = &bindGroupLayout
 			};
-			Wgpu.WGPUPipelineLayout layout = device.CreatePipelineLayout(&layoutDesc);
+			var layout = device.CreatePipelineLayout(&layoutDesc);
 
 			// Pipeline
 			Wgpu.WGPUVertexAttribute[?] attributes = .(
@@ -259,7 +259,7 @@ namespace Example {
 					alphaToCoverageEnabled = Wgpu.WGPUBool_False
 				}
 			};
-			Wgpu.WGPURenderPipeline pipeline = device.CreateRenderPipeline(&pipelineDesc);
+			var pipeline = device.CreateRenderPipeline(&pipelineDesc);
 
 			// ImGui
 			//ImGui.CHECKVERSION();
@@ -304,7 +304,7 @@ namespace Example {
 				};
 				var view = surfaceTexture.texture.CreateView(&viewDesc);
 				
-				Wgpu.WGPUCommandEncoder encoder = device.CreateCommandEncoder(null);
+				var encoder = device.CreateCommandEncoder(null);
 
 				{
 					Wgpu.WGPURenderPassColorAttachment colorDesc = .() {
@@ -319,7 +319,7 @@ namespace Example {
 						colorAttachments = &colorDesc,
 						depthStencilAttachment = null
 					};
-					Wgpu.WGPURenderPassEncoder pass = encoder.BeginRenderPass(&passDesc);
+					var pass = encoder.BeginRenderPass(&passDesc);
 
 					pass.SetPipeline(pipeline);
 					pass.SetBindGroup(0, bindGroup, 0, null);
@@ -343,8 +343,9 @@ namespace Example {
 				}
 
 				// Submit
-				Wgpu.WGPUCommandBuffer cb = encoder.Finish(null);
+				var cb = encoder.Finish(null);
 				queue.Submit(1, &cb);
+				cb.Release();
 
 				surface.Present();
 				
@@ -357,6 +358,26 @@ namespace Example {
 			//ImGuiImplWgpu.Shutdown();
 			//ImGuiImplGlfw.Shutdown();
 			//ImGui.Shutdown(context);
+
+			pipeline.Release();
+			layout.Release();
+
+			indexBuffer.Release();
+			vertexBuffer.Release();
+			shader.Release();
+
+			bindGroup.Release();
+			bindGroupLayout.Release();
+
+			sampler.Release();
+			textureView.Release();
+			texture.Release();
+
+			queue.Release();
+			device.Release();
+			adapter.Release();
+			surface.Release();
+			instance.Release();
 
 			Glfw.DestroyWindow(window);
 			Glfw.Terminate();
