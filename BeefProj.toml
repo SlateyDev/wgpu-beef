@@ -6,15 +6,13 @@ TargetType = "BeefLib"
 StartupObject = "Wgpu.Program"
 
 [Configs.Debug.Win64]
-LibPaths = ["$(ProjectDir)/dist/debug/windows/wgpu_native.dll.lib"]
-PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/debug/windows/*.dll\")"]
-
-[Configs.Release.Win64]
-LibPaths = ["$(ProjectDir)/dist/release/windows/wgpu_native.dll.lib"]
-PostBuildCmds = ["CopyToDependents(\"$(ProjectDir)/dist/release/windows/*.dll\")"]
+LibPaths = ["$(ProjectDir)/dist/wgpu-windows-x86_64-msvc-debug/lib/wgpu_native.lib", "ole32.lib", "oleaut32.lib", "opengl32.lib", "ntdll.lib", "ws2_32.lib", "runtimeobject.lib", "propsys.lib", "userenv.lib"]
 
 [Configs.Debug.Linux64]
-LibPaths = ["$(ProjectDir)/dist/debug/linux/libwgpu_native.so"]
+LibPaths = ["$(ProjectDir)/dist/wgpu-linux-x86_64-debug/lib/libwgpu_native.so"]
+
+[Configs.Release.Win64]
+LibPaths = ["$(ProjectDir)/dist/wgpu-windows-x86_64-msvc-release/lib/wgpu_native.lib", "ole32.lib", "oleaut32.lib", "opengl32.lib", "ntdll.lib", "ws2_32.lib", "runtimeobject.lib", "propsys.lib", "userenv.lib"]
 
 [Configs.Release.Linux64]
-LibPaths = ["$(ProjectDir)/dist/release/linux/libwgpu_native.so"]
+LibPaths = ["$(ProjectDir)/dist/wgpu-linux-x86_64-release/lib/libwgpu_native.so"]

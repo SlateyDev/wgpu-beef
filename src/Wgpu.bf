@@ -930,19 +930,20 @@ namespace Wgpu {
 			DeviceExtras = 0x00030001,
 			NativeLimits = 0x00030002,
 			PipelineLayoutExtras = 0x00030003,
-			ShaderModuleGLSLDescriptor = 0x00030004,
+			ShaderSourceGLSL = 0x00030004,
 			InstanceExtras = 0x00030006,
 			BindGroupEntryExtras = 0x00030007,
 			BindGroupLayoutEntryExtras = 0x00030008,
 			QuerySetDescriptorExtras = 0x00030009,
 			SurfaceConfigurationExtras = 0x0003000A,
+			SurfaceSourceSwapChainPanel = 0x0003000B,
+			PrimitiveStateExtras = 0x0003000C,
 			Force32 = 0x7FFFFFFF
 		}
 
 		public enum WGPUNativeFeature : c_uint {
 			PushConstants = 0x00030001,
 			TextureAdapterSpecificFormatFeatures = 0x00030002,
-			MultiDrawIndirect = 0x00030003,
 			MultiDrawIndirectCount = 0x00030004,
 			VertexWritableStorage = 0x00030005,
 			TextureBindingArray = 0x00030006,
@@ -958,15 +959,14 @@ namespace Wgpu {
 			// TODO: requires wgpu.h api change
 			// AddressModeClampToZero = 0x00030011,
 			// AddressModeClampToBorder = 0x00030012,
-			// PolygonModeLine = 0x00030013,
-			// PolygonModePoint = 0x00030014,
-			// ConservativeRasterization = 0x00030015,
+			PolygonModeLine = 0x00030013,
+			PolygonModePoint = 0x00030014,
+			ConservativeRasterization = 0x00030015,
 			// ClearTexture = 0x00030016,
 			SpirvShaderPassthrough = 0x00030017,
 			// Multiview = 0x00030018,
 			VertexAttribute64bit = 0x00030019,
 			TextureFormatNv12 = 0x0003001A,
-			RayTracingAccelerationStructure = 0x0003001B,
 			RayQuery = 0x0003001C,
 			ShaderF64 = 0x0003001D,
 			ShaderI16 = 0x0003001E,
@@ -977,6 +977,7 @@ namespace Wgpu {
 			SubgroupBarrier = 0x00030023,
 			TimestampQueryInsideEncoders = 0x00030024,
 			TimestampQueryInsidePasses = 0x00030025,
+			ShaderInt64 = 0x00030026,
 			Force32 = 0x7FFFFFFF
 		}
 
@@ -1042,6 +1043,24 @@ namespace Wgpu {
 			Force32 = 0x7FFFFFFF
 		}
 
+		public enum WGPUDxcMaxShaderModel : c_uint {
+			V6_0 = 0x00000000,
+			V6_1 = 0x00000001,
+			V6_2 = 0x00000002,
+			V6_3 = 0x00000003,
+			V6_4 = 0x00000004,
+			V6_5 = 0x00000005,
+			V6_6 = 0x00000006,
+			V6_7 = 0x00000007,
+			Force32 = 0x7FFFFFFF
+		}
+
+		public enum WGPUGLFenceBehaviour : c_uint {
+			Normal = 0x00000000,
+			AutoFinish = 0x00000001,
+			Force32 = 0x7FFFFFFF
+		}
+
 		public enum WGPUNativeTextureFormat : c_uint {
 			// From Features::TEXTURE_FORMAT_16BIT_NORM
 			R16Unorm = 0x00030001,
@@ -1051,7 +1070,8 @@ namespace Wgpu {
 			Rgba16Unorm = 0x00030005,
 			Rgba16Snorm = 0x00030006,
 			// From Features::TEXTURE_FORMAT_NV12
-			NV12 = 0x00030007
+			NV12 = 0x00030007,
+			P010 = 0x00030008
 		}
 
 		/**
@@ -2491,8 +2511,11 @@ namespace Wgpu {
 			public WGPUInstanceFlag flags;
 			public WGPUDx12Compiler dx12ShaderCompiler;
 			public WGPUGles3MinorVersion gles3MinorVersion;
-			public WGPUStringView dxilPath;
+			public WGPUGLFenceBehaviour glFenceBehaviour;
 			public WGPUStringView dxcPath;
+			public WGPUDxcMaxShaderModel dxcMaxShaderModel;
+			public uint8* budgetForDeviceCreation;
+			public uint8* budgetForDeviceLoss;
 
 			public this() {
 				this = default;
@@ -2554,7 +2577,7 @@ namespace Wgpu {
 		}
 
 		[CRepr]
-		public struct WGPUShaderModuleGLSLDescriptor {
+		public struct WGPUShaderSourceGLSL {
 			public WGPUChainedStruct chain;
 			public WGPUShaderStage stage;
 			public WGPUStringView code;
@@ -2674,6 +2697,33 @@ namespace Wgpu {
 		public struct WGPUSurfaceConfigurationExtras {
 			public WGPUChainedStruct chain;
 			public uint32 desiredMaximumFrameLatency;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		[CRepr]
+		public struct WGPUSurfaceSourceSwapChainPanel {
+			public WGPUChainedStruct chain;
+			public void* panelNative;
+
+			public this() {
+				this = default;
+			}
+		}
+
+		public enum WGPUPolygonMode : c_uint {
+			Fill = 0,
+			Line = 1,
+			Point = 2,
+		}
+
+		[CRepr]
+		public struct WGPUPrimitiveStateExtras {
+			public WGPUChainedStruct chain;
+			public WGPUPolygonMode polygonMode;
+			public WGPUBool conservative;
 
 			public this() {
 				this = default;
@@ -4506,7 +4556,7 @@ namespace Wgpu {
 		public static extern WGPUSubmissionIndex wgpuQueueSubmitForIndex(WGPUQueue queue, size_t commandCount, WGPUCommandBuffer* commands);
 		// Returns true if the queue is empty, or false if there are more queue submissions still in flight.
 		[LinkName("wgpuDevicePoll")]
-		public static extern WGPUBool wgpuDevicePoll(WGPUDevice device, WGPUBool wait, WGPUSubmissionIndex* wrappedSubmissionIndex);
+		public static extern WGPUBool wgpuDevicePoll(WGPUDevice device, WGPUBool wait, WGPUSubmissionIndex* submissionIndex);
 		[LinkName("wgpuDeviceCreateShaderModuleSpirV")]
 		public static extern WGPUShaderModule wgpuDeviceCreateShaderModuleSpirV(WGPUDevice device, WGPUShaderModuleDescriptorSpirV* descriptor);
 		[LinkName("wgpuSetLogCallback")]
