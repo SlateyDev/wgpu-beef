@@ -4,6 +4,7 @@ build
 generator/.vscode
 generator/bin
 generator/obj
+dist/
 
 recovery
 BeefSpace_User.toml
